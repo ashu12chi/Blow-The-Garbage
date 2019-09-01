@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "1021043396348",
+    "firebase_url": "https://blow-the-garbage.firebaseio.com",
+    "project_id": "blow-the-garbage",
+    "storage_bucket": "blow-the-garbage.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021043396348:android:20e23cae12f3b9e2",
+        "android_client_info": {
+          "package_name": "com.npdevs.blowthegarbage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021043396348-fobd8r1uaqsbo2eskun1nu9c8e1b4sgf.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.npdevs.blowthegarbage",
+            "certificate_hash": "46627ccb7d8bb332648457a04f09ca95393b9ff9"
+          }
+        },
+        {
+          "client_id": "1021043396348-f372hvafrs3k63cvkj6an5qg6v8qg0l3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.npdevs.blowthegarbage",
+            "certificate_hash": "9e30f838a5430272bf972172c670ad674dd38134"
+          }
+        },
+        {
+          "client_id": "1021043396348-nqrcmpvsj5npae6t2jjmrls5dpardc3q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAILpWLeoz7TLO5_NVIAFlczKZXntI6Wsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1021043396348-nqrcmpvsj5npae6t2jjmrls5dpardc3q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
