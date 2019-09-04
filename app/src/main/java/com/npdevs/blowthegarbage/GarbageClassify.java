@@ -4,10 +4,12 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 //import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -28,12 +30,13 @@ public class GarbageClassify extends AppCompatActivity {
     private static final boolean QUANT = true;
     private static final String LABEL_PATH = "labels.txt";
     private static final int INPUT_SIZE = 224;
-
+    private boolean isGarbage;
+    private String[] garbage= {"Laptop","Notebook"};
     private Classifier classifier;
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private TextView textViewResult;
-    private Button btnDetectObject, btnToggleCamera;
+    private Button btnDetectObject, btnNext;
     private ImageView imageViewResult;
     private CameraView cameraView;
 
@@ -46,7 +49,7 @@ public class GarbageClassify extends AppCompatActivity {
         textViewResult = findViewById(R.id.textViewResult);
         textViewResult.setMovementMethod(new ScrollingMovementMethod());
 
-        btnToggleCamera = findViewById(R.id.btnToggleCamera);
+        btnNext = findViewById(R.id.btnToggleCamera);
         btnDetectObject = findViewById(R.id.btnDetectObject);
 
         cameraView.addCameraKitListener(new CameraKitEventListener() {
@@ -70,9 +73,17 @@ public class GarbageClassify extends AppCompatActivity {
                 imageViewResult.setImageBitmap(bitmap);
 
                 final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
-
+                for(Classifier.Recognition item : results){
+                    String objects=item.toString();
+                    objects=objects.substring(objects.indexOf(' '),objects.indexOf(' ',8));
+                    for(String x:garbage)
+                    {
+                        if(objects.trim().equalsIgnoreCase(x))
+                            isGarbage=true;
+                    }
+                    Log.e("Ashu",objects);
+                }
                 textViewResult.setText(results.toString());
-
             }
 
             @Override
@@ -81,10 +92,16 @@ public class GarbageClassify extends AppCompatActivity {
             }
         });
 
-        btnToggleCamera.setOnClickListener(new View.OnClickListener() {
+        btnNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cameraView.toggleFacing();
+                Log.e("Ashu",isGarbage+"");
+                if(isGarbage)
+                {
+                    Toast.makeText(GarbageClassify.this,"Verified!!!",Toast.LENGTH_SHORT).show();
+                }
+                else
+                    Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verifiaction", Toast.LENGTH_LONG).show();
             }
         });
 

@@ -19,11 +19,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.PriorityQueue;
-
-/**
- * Created by amitshekhar on 17/03/18.
- */
-
 public class TensorFlowImageClassifier implements Classifier {
 
     private static final int MAX_RESULTS = 3;

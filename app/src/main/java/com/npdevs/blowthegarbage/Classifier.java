@@ -3,33 +3,12 @@ package com.npdevs.blowthegarbage;
 import android.graphics.Bitmap;
 
 import java.util.List;
-
-/**
- * Created by amitshekhar on 17/03/18.
- */
-
 public interface Classifier {
 
     class Recognition {
-        /**
-         * A unique identifier for what has been recognized. Specific to the class, not the instance of
-         * the object.
-         */
         private final String id;
-
-        /**
-         * Display name for the recognition.
-         */
         private final String title;
-
-        /**
-         * Whether or not the model features quantized or float weights.
-         */
         private final boolean quant;
-
-        /**
-         * A sortable score for how good the recognition is relative to others. Higher should be better.
-         */
         private final Float confidence;
 
         public Recognition(
