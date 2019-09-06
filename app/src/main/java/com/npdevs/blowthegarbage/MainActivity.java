@@ -22,7 +22,6 @@ import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.Result;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
@@ -91,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     }
 
     private void openUserActivity() {
-        Intent intent = new Intent(this,UserActivity.class);
+        Intent intent = new Intent(this, OptionsPage.class);
         startActivity(intent);
     }
 

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserActivity">
+    tools:context=".OptionsPage">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="I have pic of garbage to upload"
+            android:text="I have pic of garbage to garbage"
             android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 

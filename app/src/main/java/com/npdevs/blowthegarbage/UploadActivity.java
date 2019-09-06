@@ -1,13 +1,15 @@
 package com.npdevs.blowthegarbage;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -17,8 +19,19 @@ import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -29,15 +42,17 @@ import com.google.firebase.storage.UploadTask;
 public class UploadActivity extends AppCompatActivity {
     private EditText description;
     private ImageView imageView;
-    private RadioButton radioButton,radioButton1,radioButton2,radioButton3;
-    private Button choose,upload;
+    private RadioButton radioButton, radioButton1, radioButton2, radioButton3;
+    private Button choose, upload;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
     private ProgressBar progressBar;
     private Uri ImageUri;
-    private String severe;
-    private String organic;
+    private boolean severe;
+    private boolean organic;
     private long time = System.currentTimeMillis();
+    private LatLng latLng;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +66,11 @@ public class UploadActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar2);
         choose = findViewById(R.id.button2);
         upload = findViewById(R.id.button4);
+        double[] location=getIntent().getDoubleArrayExtra("Location");
+        assert location != null;
+        latLng=new LatLng(location[0],location[1]);
+        FirebaseApp.initializeApp(this);
+
         storageReference = FirebaseStorage.getInstance().getReference("garbage-request");
         databaseReference = FirebaseDatabase.getInstance().getReference("garbage-request");
         choose.setOnClickListener(new View.OnClickListener() {
@@ -62,7 +82,7 @@ public class UploadActivity extends AppCompatActivity {
         upload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  Log.e("Ashu","Reached!!!");
+                //  Log.e("Ashu","Reached!!!");
                 uploadFile();
                 //Log.e("Ashu","Reached!!!");
             }
@@ -70,25 +90,25 @@ public class UploadActivity extends AppCompatActivity {
         radioButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                severe="Severe";
+                severe = true;
             }
         });
         radioButton1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                severe="Normal";
+                severe = false;
             }
         });
         radioButton2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                organic="Organic";
+                organic = true;
             }
         });
         radioButton3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                organic="In-Organic";
+                organic = false;
             }
         });
     }
@@ -109,6 +129,7 @@ public class UploadActivity extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             ImageUri = data.getData();
             imageView.setImageURI(ImageUri);
+            imageView.setBackgroundColor(Color.WHITE);
         }
     }
     private void uploadFile(){
@@ -117,9 +138,9 @@ public class UploadActivity extends AppCompatActivity {
             StorageReference fileReference = storageReference.child(time+"."+getFileExtension(ImageUri));
             fileReference.putFile(ImageUri)
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @SuppressLint("ShowToast")
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                           // Log.e("Ashu","Reached1!!!");
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -127,10 +148,10 @@ public class UploadActivity extends AppCompatActivity {
                                     progressBar.setProgress(0);
                                 }
                             },3000);
-                            Toast.makeText(UploadActivity.this,"Upload Sucessful!!!",Toast.LENGTH_LONG);
-                            Upload upload = new Upload(description.getText().toString().trim(),severe,organic);
+                            Toast.makeText(UploadActivity.this,"Garbage Successful!",Toast.LENGTH_LONG);
+                            Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,0,false);
                             String uploadID = time+"";
-                            databaseReference.child(uploadID).setValue(upload);
+                            databaseReference.child(uploadID).setValue(garbage);
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {
