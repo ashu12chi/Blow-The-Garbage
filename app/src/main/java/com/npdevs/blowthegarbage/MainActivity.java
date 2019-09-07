@@ -7,10 +7,13 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +29,19 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback {
     private Button about;
@@ -33,10 +49,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private EditText mobNumber;
     private EditText password;
     private Button signup;
+    private TextInputLayout textInputLayout1;
+    private TextInputLayout textInputLayout2;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest locationRequest;
+    private ProgressDialog progressDialog;
     private int REQUEST_CHECK_SETTINGS = 100;
     private int REQUEST_LOCATION_PERMISSION=500;
+    private String mobNo;
+    private String pswd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +67,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .addApi(LocationServices.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this).build();
+        FirebaseApp.initializeApp(this);
         mGoogleApiClient.connect();
         locationRequest = LocationRequest.create();
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
@@ -57,6 +79,54 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         mobNumber = findViewById(R.id.mobNumber);
         password = findViewById(R.id.password);
         signup = findViewById(R.id.button3);
+        textInputLayout1=findViewById(R.id.name_text_input1);
+        textInputLayout1.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()!=10){
+                    textInputLayout1.setError("Enter 8 digit Registration Number!");
+                }
+                else
+                {
+                    textInputLayout1.setError(null);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
+        textInputLayout2=findViewById(R.id.name_text_input2);
+        textInputLayout2.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(charSequence.length()==0){
+                    textInputLayout2.setError("Enter valid password!");
+                }
+                else
+                {
+                    textInputLayout2.setError(null);
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
         about.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -66,13 +136,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                progressDialog=new ProgressDialog(MainActivity.this);
                 openSignUpActivity();
             }
         });
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openUserActivity();
+                progressDialog=new ProgressDialog(MainActivity.this);
+                login();
             }
         });
 
@@ -89,11 +161,82 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         }
     }
 
-    private void openUserActivity() {
-        Intent intent = new Intent(this, OptionsPage.class);
-        startActivity(intent);
+    private void login() {
+        mobNo=mobNumber.getText().toString();
+        pswd=password.getText().toString();
+        if(mobNo.isEmpty())
+        {
+            textInputLayout1.setError("Enter valid Registration Number!");
+            mobNumber.requestFocus();
+            return;
+        }
+        if(pswd.isEmpty())
+        {
+            textInputLayout2.setError("Enter valid Password!");
+            password.requestFocus();
+            return;
+        } else {
+            progressDialog.setMessage("Logging In...");
+            progressDialog.setCancelable(false);
+            progressDialog.show();
+
+            openOptionsPage();
+        }
     }
 
+    private void openOptionsPage() {
+        DatabaseReference myRef= FirebaseDatabase.getInstance().getReference("users");
+        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                String mob=mobNumber.getText().toString();
+                String pwd=password.getText().toString();
+                MessageDigest digest = null;
+                try {
+                    digest = MessageDigest.getInstance("SHA-256");
+                } catch (NoSuchAlgorithmException e) {
+                    e.printStackTrace();
+                }
+                assert digest != null;
+                byte[] pasd = digest.digest(pwd.getBytes(StandardCharsets.UTF_8));
+                pwd= Arrays.toString(pasd);
+                if(dataSnapshot.child(mob).exists())
+                {
+                    if(!mob.isEmpty())
+                    {
+                        Users login=dataSnapshot.child(mob).getValue(Users.class);
+                        if(login.getPassword().equals(pwd))
+                        {
+                            Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
+                            Intent intent = new Intent(MainActivity.this,OptionsPage.class);
+                            startActivity(intent);
+                            progressDialog.cancel();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
+                            progressDialog.cancel();
+                        }
+                    }
+                    else
+                    {
+                        Toast.makeText(getApplicationContext(),"Enter Registration number!",Toast.LENGTH_LONG).show();
+                        progressDialog.cancel();
+                    }
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(),"User is not registered!",Toast.LENGTH_LONG).show();
+                    progressDialog.cancel();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
+                progressDialog.cancel();
+            }
+        });
+    }
     private void openSignUpActivity() {
         Intent intent = new Intent(this,SignUp.class);
         startActivity(intent);

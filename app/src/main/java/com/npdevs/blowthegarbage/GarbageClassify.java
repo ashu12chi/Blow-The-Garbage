@@ -45,6 +45,7 @@ public class GarbageClassify extends AppCompatActivity {
     private static final String LABEL_PATH = "labels.txt";
     private static final int INPUT_SIZE = 224;
     private boolean isGarbage;
+    private int garbageIndex;
     private String[] garbage= {"Laptop","Notebook"};
     private Classifier classifier;
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -52,6 +53,7 @@ public class GarbageClassify extends AppCompatActivity {
     private Location mLastKnownLocation;
     private StorageReference storageReference;
     private DatabaseReference databaseReference;
+    private long time=System.currentTimeMillis();
 
     private Executor executor = Executors.newSingleThreadExecutor();
     private TextView textViewResult;
@@ -103,11 +105,15 @@ public class GarbageClassify extends AppCompatActivity {
                 final List<Classifier.Recognition> results = classifier.recognizeImage(bitmap);
                 for(Classifier.Recognition item : results){
                     String objects=item.toString();
+                    garbageIndex=0;
                     objects=objects.substring(objects.indexOf(' '),objects.indexOf(' ',8));
                     for(String x:garbage)
                     {
-                        if(objects.trim().equalsIgnoreCase(x))
-                            isGarbage=true;
+                        if(objects.trim().equalsIgnoreCase(x)) {
+                            isGarbage = true;
+                            break;
+                        }
+                        garbageIndex++;
                     }
                     Log.e("Ashu",objects);
                 }
@@ -130,9 +136,13 @@ public class GarbageClassify extends AppCompatActivity {
 
                     getDeviceLocation();
                     Log.e("NSP","Location Recieved: "+mLastKnownLocation);
+                    Garbage garbageUpload = new Garbage(garbage[garbageIndex],true,false,mLastKnownLocation.getLatitude(),mLastKnownLocation.getLongitude(),0,true);
+                    String uploadID = time+"";
+                    databaseReference.child(uploadID).setValue(garbageUpload);
                 }
-                else
-                    Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verifiaction", Toast.LENGTH_LONG).show();
+                else {
+                    Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verification", Toast.LENGTH_LONG).show();
+                }
             }
         });
 

@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="always"
     tools:context=".SignUp">
 
     <com.google.android.material.textfield.TextInputLayout
@@ -16,12 +17,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.05">
+        app:layout_constraintVertical_bias="0.1">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="Name"
             android:inputType="text"
             android:textSize="18sp" />
@@ -37,12 +38,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.2">
+        app:layout_constraintVertical_bias="0.225">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText2"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="Mobile Number"
             android:inputType="text"
             android:textSize="18sp" />
@@ -62,8 +63,8 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText3"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="Address"
             android:inputType="text"
             android:textSize="18sp" />
@@ -79,12 +80,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        app:layout_constraintVertical_bias="0.475">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText4"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="Password"
             android:inputType="textPassword"
             android:textSize="18sp" />
@@ -100,12 +101,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.65">
+        app:layout_constraintVertical_bias="0.6">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText5"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="Repeat Password"
             android:inputType="textPassword"
             android:textSize="18sp" />
@@ -120,12 +121,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.8">
+        app:layout_constraintVertical_bias="0.725">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editText7"
-            android:layout_width="245dp"
-            android:layout_height="70dp"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
             android:hint="OTP"
             android:inputType="textPassword"
             android:textSize="18sp" />
@@ -138,9 +139,10 @@
         android:text="Signup"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.768"
+        app:layout_constraintHorizontal_bias="0.772"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_text_input6" />
+        app:layout_constraintTop_toBottomOf="@+id/name_text_input6"
+        app:layout_constraintVertical_bias="0.335" />
 
     <Button
         android:id="@+id/button5"
@@ -149,7 +151,8 @@
         android:text="Get OTP"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.202"
+        app:layout_constraintHorizontal_bias="0.205"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/name_text_input6" />
+        app:layout_constraintTop_toBottomOf="@+id/name_text_input6"
+        app:layout_constraintVertical_bias="0.335" />
 </androidx.constraintlayout.widget.ConstraintLayout>
