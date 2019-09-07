@@ -89,7 +89,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(charSequence.length()!=10){
-                    textInputLayout1.setError("Enter 8 digit Registration Number!");
+                    textInputLayout1.setError("Enter 10 digit Mobile Number!");
                 }
                 else
                 {
@@ -164,9 +164,9 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     private void login() {
         mobNo=mobNumber.getText().toString();
         pswd=password.getText().toString();
-        if(mobNo.isEmpty())
+        if(mobNo.isEmpty() || mobNo.length()<10)
         {
-            textInputLayout1.setError("Enter valid Registration Number!");
+            textInputLayout1.setError("Enter 10 digit Mobile Number!");
             mobNumber.requestFocus();
             return;
         }
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                     }
                     else
                     {
-                        Toast.makeText(getApplicationContext(),"Enter Registration number!",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Enter 10 digit Mobile number!",Toast.LENGTH_LONG).show();
                         progressDialog.cancel();
                     }
                 }

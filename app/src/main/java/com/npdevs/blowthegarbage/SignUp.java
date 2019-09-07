@@ -72,19 +72,19 @@ public class SignUp extends AppCompatActivity {
                     return;
                 }
                 if(m.length() != 10) {
-                    name.setError("Enter valid Mobile Number!");
+                    mobNumber.setError("Enter valid Mobile Number!");
                     return;
                 }
                 if(a.isEmpty()) {
-                    name.setError("Enter valid address!");
+                    address.setError("Enter valid address!");
                     return;
                 }
                 if(p1.isEmpty() || p1.length()<6) {
-                    name.setError("Enter at least 6 length password!");
+                    password1.setError("Enter at least 6 length password!");
                     return;
                 }
                 if(p2.isEmpty() || p2.length()<6 || !p2.equals(p1)) {
-                    name.setError("Enter same password here!");
+                    password2.setError("Enter same password here!");
                     return;
                 } else {
                     progressDialog.setMessage("Registering...");
@@ -172,7 +172,6 @@ public class SignUp extends AppCompatActivity {
     PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         @Override
         public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-//            Toast.makeText(SignUp.this,"Something good happened!",Toast.LENGTH_SHORT).show();
             progressDialog.cancel();
         }
 
