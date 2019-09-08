@@ -1,6 +1,8 @@
 package com.npdevs.blowthegarbage;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -8,14 +10,20 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -72,8 +80,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 	private String access_token="pk.eyJ1IjoibmlzaGNoYWwiLCJhIjoiY2swMHZxeXNqMHE3NjNkc2N5NTJndnN2dCJ9.O2DHCiqvsvdRulclqUYxmg";
 	private FloatingActionButton floatingActionButton;
 	private Button buttonConfirm;
-
-	DatabaseReference myRef;
+	private DatabaseReference myRef;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +169,16 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 			}
 		});
 
+		mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+			@Override
+			public void onInfoWindowClick(Marker marker1) {
+				if(marker1.getTitle().equals("Garbage Here"));
+				{
+					openDialog();
+				}
+			}
+		});
+
 		mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
 			@Override
 			public void onMapLongClick(LatLng ll) {
@@ -192,7 +209,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 					Garbage post=postSnapshot.getValue(Garbage.class);
 					assert post != null;
 					LatLng loc=new LatLng(post.getLatitude(),post.getLongitude());
-					mMap.addMarker(new MarkerOptions().position(loc).title("Garbage Here").snippet("Upvotes: "+post.getUpvotes())
+					mMap.addMarker(new MarkerOptions().position(loc).title("Garbage Here").draggable(false).snippet("Upvotes: "+post.getUpvotes())
 							.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(post.getLatitude(),post.getLongitude()),DEFAULT_ZOOM));
 				}
@@ -329,4 +346,62 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 			}
 		});
 	}
+
+	public void openDialog() {
+
+		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+
+		TextView title = new TextView(this);
+
+		title.setText("");
+		title.setPadding(10, 10, 10, 10);   // Set Position
+		title.setGravity(Gravity.CENTER);
+		title.setTextColor(Color.BLACK);
+		title.setTextSize(20);
+		alertDialog.setCustomTitle(title);
+
+		TextView msg = new TextView(this);
+
+		msg.setText("    SELECT AN OPTION");
+		msg.setTextColor(Color.BLACK);
+		msg.setTextSize(20);
+		alertDialog.setView(msg);
+
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, " UPVOTE ", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialogInterface, int i) {
+				//TODO
+			}
+		});
+
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"BACK  ", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO
+			}
+		});
+
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE," DOWNVOTE ", new DialogInterface.OnClickListener() {
+			public void onClick(DialogInterface dialog, int which) {
+				//TODO
+			}
+		});
+
+		new Dialog(getApplicationContext());
+		alertDialog.show();
+
+		// Set Properties for OK Button
+		final Button okBT = alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL);
+		LinearLayout.LayoutParams neutralBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+		neutralBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+		okBT.setPadding(50, 10, 10, 10);   // Set Position
+		okBT.setTextColor(Color.BLUE);
+		okBT.setLayoutParams(neutralBtnLP);
+
+		final Button cancelBT = alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE);
+		LinearLayout.LayoutParams negBtnLP = (LinearLayout.LayoutParams) okBT.getLayoutParams();
+		negBtnLP.gravity = Gravity.FILL_HORIZONTAL;
+		cancelBT.setTextColor(Color.RED);
+		cancelBT.setLayoutParams(negBtnLP);
+	}
+
 }

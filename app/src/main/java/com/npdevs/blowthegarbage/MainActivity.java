@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        Intent intent = new Intent(MainActivity.this,OptionsPage.class);
+//        startActivity(intent);
         setContentView(R.layout.activity_main);
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .addApi(LocationServices.API)
@@ -83,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         textInputLayout1.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
@@ -99,7 +100,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 
@@ -118,12 +118,10 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
 

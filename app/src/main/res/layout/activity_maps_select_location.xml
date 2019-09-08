@@ -18,7 +18,7 @@
 		android:id="@+id/floatingActionButton"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_alignParentRight="true"
+		android:layout_alignParentLeft="true"
 		android:layout_alignParentBottom="true"
 		android:layout_marginHorizontal="20sp"
 		android:layout_marginVertical="20sp"
@@ -26,15 +26,19 @@
 		android:backgroundTint="#00FFFFFF"
 		android:backgroundTintMode="screen"
 		android:clickable="true"
-		android:elevation="18dp"
+		android:elevation="8dp"
 		android:tint="#00FFFFFF"
 		app:backgroundTint="#00FFFFFF"
 		app:srcCompat="@drawable/quantum_ic_search_grey600_24" />
 
-	<Button
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/buttonConfirm"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
+		android:backgroundTint="@color/quantum_black_100"
+		android:elevation="8dp"
+		android:textColor="@color/mapbox_plugins_white"
+		android:foreground="?android:attr/selectableItemBackground"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
 		android:layout_marginVertical="20sp"

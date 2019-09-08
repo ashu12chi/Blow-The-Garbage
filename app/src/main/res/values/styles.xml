@@ -23,6 +23,7 @@
 		<item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
 		<item name="materialButtonStyle">@style/AppButton</item>
 		<item name="textInputStyle">@style/AppTextLayout</item>
+		<item name="materialCardViewStyle">@style/AppCard</item>
 	</style>
 
 	<style name="AppTextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">
@@ -39,9 +40,19 @@
 		<item name="cornerFamily">rounded</item>
 		<item name="cornerSize">32dp</item>
 	</style>
+	<style name="AppShapeAppearance.LargeComponent" parent="ShapeAppearance.MaterialComponents.LargeComponent">
+		<item name="cornerFamily">rounded</item>
+		<item name="cornerSize">32dp</item>
+	</style>
 	<style name="AppTextLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 		<item name="hintTextAppearance">@style/TextAppearance.Design.Hint</item>
 		<item name="android:paddingBottom">8dp</item>
+	</style>
+	<style name="AppCard" parent="Widget.MaterialComponents.CardView">
+		<item name="cardElevation">8dp</item>
+		<item name="cardMaxElevation">20dp</item>
+		<item name="cardCornerRadius">32dp</item>
+		<item name="android:radius">32dp</item>
 	</style>
 
 </resources>

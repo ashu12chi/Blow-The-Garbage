@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.AuthResult;
@@ -38,6 +39,7 @@ public class SignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ProgressDialog progressDialog;
     private String codeSent;
+    private TextInputLayout nameLay,mobLay,addLay,p1Lay,p2Lay,otpLay;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +55,12 @@ public class SignUp extends AppCompatActivity {
         password2 = findViewById(R.id.editText5);
         otp = findViewById(R.id.editText7);
         getOTP = findViewById(R.id.button5);
+        nameLay=findViewById(R.id.name_text_input1);
+        mobLay=findViewById(R.id.name_text_input2);
+        addLay=findViewById(R.id.name_text_input3);
+        p1Lay=findViewById(R.id.name_text_input4);
+        p2Lay=findViewById(R.id.name_text_input5);
+        otpLay=findViewById(R.id.name_text_input6);
 
         FirebaseApp.initializeApp(this);
         mAuth=FirebaseAuth.getInstance();
@@ -68,23 +76,28 @@ public class SignUp extends AppCompatActivity {
                 p2=password2.getText().toString();
                 o=otp.getText().toString();
                 if(n.isEmpty()) {
-                    name.setError("Enter valid name!");
+                    nameLay.setError("Enter valid name!");
+                    name.requestFocus();
                     return;
                 }
                 if(m.length() != 10) {
-                    mobNumber.setError("Enter valid Mobile Number!");
+                    mobLay.setError("Enter valid Mobile Number!");
+                    mobNumber.requestFocus();
                     return;
                 }
                 if(a.isEmpty()) {
-                    address.setError("Enter valid address!");
+                    addLay.setError("Enter valid address!");
+                    address.requestFocus();
                     return;
                 }
                 if(p1.isEmpty() || p1.length()<6) {
-                    password1.setError("Enter at least 6 length password!");
+                    p1Lay.setError("Enter at least 6 length password!");
+                    password1.requestFocus();
                     return;
                 }
                 if(p2.isEmpty() || p2.length()<6 || !p2.equals(p1)) {
-                    password2.setError("Enter same password here!");
+                    p2Lay.setError("Enter same password here!");
+                    password2.requestFocus();
                     return;
                 } else {
                     progressDialog.setMessage("Registering...");
@@ -98,7 +111,9 @@ public class SignUp extends AppCompatActivity {
             public void onClick(View view) {
                 String m=mobNumber.getText().toString();
                 if(m.isEmpty()) {
-                    mobNumber.setError("Enter valid Mobile Number");
+                    mobLay.setError("Enter valid Mobile Number");
+                    mobNumber.requestFocus();
+                    return;
                 } else {
                     progressDialog.setMessage("Sending OTP...");
                     progressDialog.show();

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".OptionsPage">
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -30,9 +30,9 @@
             android:layout_gravity="center"
             android:text="@string/i_am_currently_at_location_of_garbage"
             android:textSize="20sp" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView2"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -55,9 +55,9 @@
             android:layout_gravity="center"
             android:text="@string/i_have_pic_of_garbage_to_upload"
             android:textSize="20sp" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView3"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -80,9 +80,9 @@
             android:layout_gravity="center"
             android:text="Review and Feedback"
             android:textSize="20sp" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardView4"
         android:layout_width="match_parent"
         android:layout_height="150dp"
@@ -105,6 +105,6 @@
             android:layout_gravity="center"
             android:text="Complaint"
             android:textSize="20sp" />
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
