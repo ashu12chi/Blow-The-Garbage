@@ -136,7 +136,7 @@ public class GarbageClassify extends AppCompatActivity {
 
                         getDeviceLocation();
                         Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
-                        Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true);
+                        Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true,"No-url");
                         String uploadID = time + "";
                         databaseReference.child(uploadID).setValue(garbageUpload);
                     } else {

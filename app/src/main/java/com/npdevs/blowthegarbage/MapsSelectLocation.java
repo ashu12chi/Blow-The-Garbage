@@ -174,7 +174,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 			public void onInfoWindowClick(Marker marker1) {
 				if(marker1.getTitle().equals("Garbage Here"));
 				{
-					openDialog();
+					openDialog(marker1);
 				}
 			}
 		});
@@ -202,6 +202,8 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		});
 	}
 	private void showGarbages(){
+		mMap.clear();
+		marker=mMap.addMarker(new MarkerOptions().position(marker.getPosition()).title(marker.getTitle()).draggable(true).snippet(marker.getSnippet()));
 		myRef.addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -209,9 +211,8 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 					Garbage post=postSnapshot.getValue(Garbage.class);
 					assert post != null;
 					LatLng loc=new LatLng(post.getLatitude(),post.getLongitude());
-					mMap.addMarker(new MarkerOptions().position(loc).title("Garbage Here").draggable(false).snippet("Upvotes: "+post.getUpvotes())
+					mMap.addMarker(new MarkerOptions().position(loc).title("Garbage Here").draggable(false).snippet("\tUpvotes: "+post.getUpvotes()+"\nTime: "+postSnapshot.getKey())
 							.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(post.getLatitude(),post.getLongitude()),DEFAULT_ZOOM));
 				}
 			}
 
@@ -347,7 +348,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		});
 	}
 
-	public void openDialog() {
+	public void openDialog(final Marker marker1) {
 
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
@@ -370,19 +371,29 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, " UPVOTE ", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialogInterface, int i) {
-				//TODO
+				String key1=marker1.getSnippet();
+				String key=key1.substring(key1.lastIndexOf(':')+2);
+				int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+				System.out.println(key+" "+up);
+				myRef.child(key).child("upvotes").setValue(up+1);
+				showGarbages();
 			}
 		});
 
 		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"BACK  ", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				//TODO
+				// No need to write anything here
 			}
 		});
 
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE," DOWNVOTE ", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
-				//TODO
+				String key1=marker1.getSnippet();
+				String key=key1.substring(key1.lastIndexOf(':')+2);
+				int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+				System.out.println(key+" "+up);
+				myRef.child(key).child("upvotes").setValue(up-1);
+				showGarbages();
 			}
 		});
 

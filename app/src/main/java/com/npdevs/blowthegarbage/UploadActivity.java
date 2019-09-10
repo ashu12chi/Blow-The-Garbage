@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -131,7 +132,7 @@ public class UploadActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @SuppressLint("ShowToast")
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -140,9 +141,15 @@ public class UploadActivity extends AppCompatActivity {
                                 }
                             },3000);
                             Toast.makeText(UploadActivity.this,"Garbage Successful!",Toast.LENGTH_LONG);
-                            Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,0,false);
-                            String uploadID = time+"";
-                            databaseReference.child(uploadID).setValue(garbage);
+                            storageReference.child(time+"."+getFileExtension(ImageUri)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri uri) {
+                                    String url = uri.toString();
+                                    Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,0,false,url);
+                                    String uploadID = time+"";
+                                    databaseReference.child(uploadID).setValue(garbage);
+                                }
+                            });
                         }
                     })
                     .addOnFailureListener(new OnFailureListener() {

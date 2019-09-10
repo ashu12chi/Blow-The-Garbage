@@ -9,12 +9,13 @@ public class Garbage {
     private double longitude;
     private int upvotes;
     private boolean verified;
+    private String url;
 
     public Garbage(){
         //empty
     }
 
-    public Garbage(String description, boolean severe, boolean organic, double latitude, double longitude, int upvotes,boolean verified)
+    public Garbage(String description, boolean severe, boolean organic, double latitude, double longitude, int upvotes,boolean verified,String url)
     {
         if(description.trim().equals("")){
             description = "No Name";
@@ -26,6 +27,7 @@ public class Garbage {
         this.longitude=longitude;
         this.upvotes=upvotes;
         this.verified=verified;
+        this.url=url;
     }
 
     public String getDescription()
@@ -39,6 +41,14 @@ public class Garbage {
 
     public double getLatitude() {
         return latitude;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public double getLongitude() {

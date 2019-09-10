@@ -1,8 +1,8 @@
 <resources>
-	<string name="app_name">Blow The Garbage</string>
-	<string name="i_am_currently_at_location_of_garbage">I am currently at location of garbage</string>
-	<string name="i_have_pic_of_garbage_to_upload">I have pic of garbage to upload</string>
-	<string name="review_and_feedback">Review and Feedback</string>
-	<string name="complaint">Complaint</string>
-	<string name="title_activity_maps_select_location">Map</string>
+    <string name="app_name">Blow The Garbage</string>
+    <string name="i_am_currently_at_location_of_garbage">I am currently at location of garbage</string>
+    <string name="i_have_pic_of_garbage_to_upload">I have pic of garbage to upload</string>
+    <string name="review_and_feedback">Review and Feedback</string>
+    <string name="complaint">Complaint</string>
+    <string name="title_activity_maps_select_location">Map</string>
 </resources>
