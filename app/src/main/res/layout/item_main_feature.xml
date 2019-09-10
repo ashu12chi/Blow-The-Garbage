@@ -1,98 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.appcompat.widget.LinearLayoutCompat
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:background="?android:attr/selectableItemBackground"
+	android:orientation="vertical">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:clickable="false"
-        app:cardCornerRadius="16dp"
-        app:cardElevation="8dp"
-        app:cardUseCompatPadding="true"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:focusable="true">
+	<androidx.cardview.widget.CardView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="false"
+		app:cardCornerRadius="16dp"
+		app:cardElevation="8dp"
+		app:cardUseCompatPadding="true"
+		android:foreground="?android:attr/selectableItemBackground"
+		android:focusable="true">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/nameView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:gravity="center"
-                android:textAllCaps="true"
-                android:maxLines="1"
-                android:textColor="@android:color/black"
-                android:textSize="20sp" />
+			<TextView
+				android:id="@+id/nameView"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginEnd="16dp"
+				android:layout_marginRight="16dp"
+				android:gravity="center"
+				android:textAllCaps="true"
+				android:maxLines="1"
+				android:textColor="@android:color/black"
+				android:textSize="20sp" />
 
-            <ImageView
-                android:id="@+id/garbage"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:srcCompat="@tools:sample/avatars[11]" />
+			<ImageView
+				android:id="@+id/garbage"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				tools:srcCompat="@tools:sample/avatars[11]" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:paddingHorizontal="8dp">
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:orientation="horizontal"
+				android:paddingHorizontal="8dp">
 
-                <TextView
-                    android:id="@+id/organic1"
-                    android:layout_width="134dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="left"
-                    android:text="TextView" />
+				<TextView
+					android:id="@+id/organic1"
+					android:layout_width="134dp"
+					android:layout_height="wrap_content"
+					android:gravity="left"
+					android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/severe1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center_horizontal"
-                    android:text="TextView" />
+				<TextView
+					android:id="@+id/severe1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:gravity="center_horizontal"
+					android:text="TextView" />
 
-                <TextView
-                    android:id="@+id/upvote1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="right"
-                    android:layout_weight="1"
-                    android:text="TextView" />
-            </LinearLayout>
+				<TextView
+					android:id="@+id/upvote1"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:gravity="right"
+					android:layout_weight="1"
+					android:text="TextView" />
+			</LinearLayout>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_gravity="center_horizontal">
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:orientation="horizontal"
+				android:layout_gravity="center_horizontal">
 
-                <Button
-                    android:id="@+id/approved"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Approve" />
+				<Button
+					android:id="@+id/approved"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Approve" />
 
-                <Button
-                    android:id="@+id/disapproved"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Disapprove" />
-            </LinearLayout>
+				<Button
+					android:id="@+id/disapproved"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:text="Disapprove" />
+			</LinearLayout>
 
-        </LinearLayout>
+		</LinearLayout>
 
-    </androidx.cardview.widget.CardView>
+	</androidx.cardview.widget.CardView>
 </androidx.appcompat.widget.LinearLayoutCompat>

@@ -44,268 +44,268 @@ import java.util.Arrays;
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback {
-    private Button about;
-    private Button login;
-    private EditText mobNumber;
-    private EditText password;
-    private Button signup;
-    private TextInputLayout textInputLayout1;
-    private TextInputLayout textInputLayout2;
-    private GoogleApiClient mGoogleApiClient;
-    private LocationRequest locationRequest;
-    private ProgressDialog progressDialog;
-    private int REQUEST_CHECK_SETTINGS = 100;
-    private int REQUEST_LOCATION_PERMISSION=500;
-    private String mobNo;
-    private String pswd;
+	private Button about;
+	private Button login;
+	private EditText mobNumber;
+	private EditText password;
+	private Button signup;
+	private TextInputLayout textInputLayout1;
+	private TextInputLayout textInputLayout2;
+	private GoogleApiClient mGoogleApiClient;
+	private LocationRequest locationRequest;
+	private ProgressDialog progressDialog;
+	private int REQUEST_CHECK_SETTINGS = 100;
+	private int REQUEST_LOCATION_PERMISSION=500;
+	private String mobNo;
+	private String pswd;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 //        Intent intent = new Intent(MainActivity.this,Admin.class);
 //        startActivity(intent);
-        setContentView(R.layout.activity_main);
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(LocationServices.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this).build();
-        FirebaseApp.initializeApp(this);
-        mGoogleApiClient.connect();
-        locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-        locationRequest.setInterval(30 * 1000);
-        locationRequest.setFastestInterval(5 * 1000);
+		setContentView(R.layout.activity_main);
+		mGoogleApiClient = new GoogleApiClient.Builder(this)
+				.addApi(LocationServices.API)
+				.addConnectionCallbacks(this)
+				.addOnConnectionFailedListener(this).build();
+		FirebaseApp.initializeApp(this);
+		mGoogleApiClient.connect();
+		locationRequest = LocationRequest.create();
+		locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+		locationRequest.setInterval(30 * 1000);
+		locationRequest.setFastestInterval(5 * 1000);
 
-        about = findViewById(R.id.about);
-        login = findViewById(R.id.login);
-        mobNumber = findViewById(R.id.mobNumber);
-        password = findViewById(R.id.password);
-        signup = findViewById(R.id.button3);
-        textInputLayout1=findViewById(R.id.name_text_input1);
-        textInputLayout1.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+		about = findViewById(R.id.about);
+		login = findViewById(R.id.login);
+		mobNumber = findViewById(R.id.mobNumber);
+		password = findViewById(R.id.password);
+		signup = findViewById(R.id.button3);
+		textInputLayout1=findViewById(R.id.name_text_input1);
+		textInputLayout1.getEditText().addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+			}
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length()!=10){
-                    textInputLayout1.setError("Enter 10 digit Mobile Number!");
-                }
-                else
-                {
-                    textInputLayout1.setError(null);
-                }
-            }
+			@Override
+			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+				if(charSequence.length()!=10){
+					textInputLayout1.setError("Enter 10 digit Mobile Number!");
+				}
+				else
+				{
+					textInputLayout1.setError(null);
+				}
+			}
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+			@Override
+			public void afterTextChanged(Editable editable) {
+			}
+		});
 
-        textInputLayout2=findViewById(R.id.name_text_input2);
-        textInputLayout2.getEditText().addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                if(charSequence.length()==0){
-                    textInputLayout2.setError("Enter valid password!");
-                }
-                else
-                {
-                    textInputLayout2.setError(null);
-                }
-            }
+		textInputLayout2=findViewById(R.id.name_text_input2);
+		textInputLayout2.getEditText().addTextChangedListener(new TextWatcher() {
+			@Override
+			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+				if(charSequence.length()==0){
+					textInputLayout2.setError("Enter valid password!");
+				}
+				else
+				{
+					textInputLayout2.setError(null);
+				}
+			}
 
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-            }
+			@Override
+			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+			}
 
-            @Override
-            public void afterTextChanged(Editable editable) {
-            }
-        });
+			@Override
+			public void afterTextChanged(Editable editable) {
+			}
+		});
 
-        about.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                openAboutActivity();
-            }
-        });
-        signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog=new ProgressDialog(MainActivity.this);
-                openSignUpActivity();
-            }
-        });
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                progressDialog=new ProgressDialog(MainActivity.this);
-                login();
-            }
-        });
+		about.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				openAboutActivity();
+			}
+		});
+		signup.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				progressDialog=new ProgressDialog(MainActivity.this);
+				openSignUpActivity();
+			}
+		});
+		login.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				progressDialog=new ProgressDialog(MainActivity.this);
+				login();
+			}
+		});
 
-        enableMyLocation();
-    }
-    private void enableMyLocation() {
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
-        } else {
-            ActivityCompat.requestPermissions(this, new String[]
-                            {Manifest.permission.ACCESS_FINE_LOCATION},
-                    REQUEST_LOCATION_PERMISSION);
-        }
-    }
+		enableMyLocation();
+	}
+	private void enableMyLocation() {
+		if (ContextCompat.checkSelfPermission(this,
+				Manifest.permission.ACCESS_FINE_LOCATION)
+				== PackageManager.PERMISSION_GRANTED) {
+		} else {
+			ActivityCompat.requestPermissions(this, new String[]
+							{Manifest.permission.ACCESS_FINE_LOCATION},
+					REQUEST_LOCATION_PERMISSION);
+		}
+	}
 
-    private void login() {
-        mobNo=mobNumber.getText().toString();
-        pswd=password.getText().toString();
-        if(mobNo.equals("987") && pswd.equals("987"))
-        {
-            Intent intent = new Intent(MainActivity.this,Admin.class);
-            startActivity(intent);
-        }
-        if(mobNo.isEmpty() || mobNo.length()<10)
-        {
-            textInputLayout1.setError("Enter 10 digit Mobile Number!");
-            mobNumber.requestFocus();
-            return;
-        }
-        if(pswd.isEmpty())
-        {
-            textInputLayout2.setError("Enter valid Password!");
-            password.requestFocus();
-            return;
-        } else {
-            progressDialog.setMessage("Logging In...");
-            progressDialog.setCancelable(false);
-            progressDialog.show();
+	private void login() {
+		mobNo=mobNumber.getText().toString();
+		pswd=password.getText().toString();
+		if(mobNo.equals("987") && pswd.equals("987"))
+		{
+			Intent intent = new Intent(MainActivity.this,Admin.class);
+			startActivity(intent);
+		}
+		if(mobNo.isEmpty() || mobNo.length()<10)
+		{
+			textInputLayout1.setError("Enter 10 digit Mobile Number!");
+			mobNumber.requestFocus();
+			return;
+		}
+		if(pswd.isEmpty())
+		{
+			textInputLayout2.setError("Enter valid Password!");
+			password.requestFocus();
+			return;
+		} else {
+			progressDialog.setMessage("Logging In...");
+			progressDialog.setCancelable(false);
+			progressDialog.show();
 
-            openOptionsPage();
-        }
-    }
+			openOptionsPage();
+		}
+	}
 
-    private void openOptionsPage() {
-        DatabaseReference myRef= FirebaseDatabase.getInstance().getReference("users");
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                String mob=mobNumber.getText().toString();
-                String pwd=password.getText().toString();
-                MessageDigest digest = null;
-                try {
-                    digest = MessageDigest.getInstance("SHA-256");
-                } catch (NoSuchAlgorithmException e) {
-                    e.printStackTrace();
-                }
-                assert digest != null;
-                byte[] pasd = digest.digest(pwd.getBytes(StandardCharsets.UTF_8));
-                pwd= Arrays.toString(pasd);
-                if(dataSnapshot.child(mob).exists())
-                {
-                    if(!mob.isEmpty())
-                    {
-                        Users login=dataSnapshot.child(mob).getValue(Users.class);
-                        if(login.getPassword().equals(pwd))
-                        {
-                            Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
-                            Intent intent = new Intent(MainActivity.this,OptionsPage.class);
-                            startActivity(intent);
-                            progressDialog.cancel();
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
-                            progressDialog.cancel();
-                        }
-                    }
-                    else
-                    {
-                        Toast.makeText(getApplicationContext(),"Enter 10 digit Mobile number!",Toast.LENGTH_LONG).show();
-                        progressDialog.cancel();
-                    }
-                }
-                else
-                {
-                    Toast.makeText(getApplicationContext(),"User is not registered!",Toast.LENGTH_LONG).show();
-                    progressDialog.cancel();
-                }
-            }
+	private void openOptionsPage() {
+		DatabaseReference myRef= FirebaseDatabase.getInstance().getReference("users");
+		myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				String mob=mobNumber.getText().toString();
+				String pwd=password.getText().toString();
+				MessageDigest digest = null;
+				try {
+					digest = MessageDigest.getInstance("SHA-256");
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+				assert digest != null;
+				byte[] pasd = digest.digest(pwd.getBytes(StandardCharsets.UTF_8));
+				pwd= Arrays.toString(pasd);
+				if(dataSnapshot.child(mob).exists())
+				{
+					if(!mob.isEmpty())
+					{
+						Users login=dataSnapshot.child(mob).getValue(Users.class);
+						if(login.getPassword().equals(pwd))
+						{
+							Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
+							Intent intent = new Intent(MainActivity.this,OptionsPage.class);
+							startActivity(intent);
+							progressDialog.cancel();
+						}
+						else {
+							Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
+							progressDialog.cancel();
+						}
+					}
+					else
+					{
+						Toast.makeText(getApplicationContext(),"Enter 10 digit Mobile number!",Toast.LENGTH_LONG).show();
+						progressDialog.cancel();
+					}
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(),"User is not registered!",Toast.LENGTH_LONG).show();
+					progressDialog.cancel();
+				}
+			}
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
-                progressDialog.cancel();
-            }
-        });
-    }
-    private void openSignUpActivity() {
-        Intent intent = new Intent(this,SignUp.class);
-        startActivity(intent);
-    }
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
+				progressDialog.cancel();
+			}
+		});
+	}
+	private void openSignUpActivity() {
+		Intent intent = new Intent(this,SignUp.class);
+		startActivity(intent);
+	}
 
-    private void openAboutActivity() {
-        Intent intent = new Intent(this,About.class);
-        startActivity(intent);
-    }
+	private void openAboutActivity() {
+		Intent intent = new Intent(this,About.class);
+		startActivity(intent);
+	}
 
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest);
-        builder.setAlwaysShow(true);
-        PendingResult result =
-                LocationServices.SettingsApi.checkLocationSettings(
-                        mGoogleApiClient,
-                        builder.build()
-                );
+	@Override
+	public void onConnected(@Nullable Bundle bundle) {
+		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+				.addLocationRequest(locationRequest);
+		builder.setAlwaysShow(true);
+		PendingResult result =
+				LocationServices.SettingsApi.checkLocationSettings(
+						mGoogleApiClient,
+						builder.build()
+				);
 
-        result.setResultCallback(this);
-    }
+		result.setResultCallback(this);
+	}
 
-    @Override
-    public void onConnectionSuspended(int i) {
+	@Override
+	public void onConnectionSuspended(int i) {
 
-    }
+	}
 
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+	@Override
+	public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
-    }
+	}
 
-    @Override
-    public void onResult(@NonNull Result result) {
-        final Status status = result.getStatus();
-        switch (status.getStatusCode()) {
-            case LocationSettingsStatusCodes.SUCCESS:
-                break;
+	@Override
+	public void onResult(@NonNull Result result) {
+		final Status status = result.getStatus();
+		switch (status.getStatusCode()) {
+			case LocationSettingsStatusCodes.SUCCESS:
+				break;
 
-            case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
-                try {
-                    status.startResolutionForResult(this, REQUEST_CHECK_SETTINGS);
-                } catch (IntentSender.SendIntentException e) {
-                }
-                break;
-            case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
-                // Location settings are unavailable so not possible to show any dialog now
-                break;
-        }
-    }
+			case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+				try {
+					status.startResolutionForResult(this, REQUEST_CHECK_SETTINGS);
+				} catch (IntentSender.SendIntentException e) {
+				}
+				break;
+			case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+				// Location settings are unavailable so not possible to show any dialog now
+				break;
+		}
+	}
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == REQUEST_CHECK_SETTINGS) {
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+		super.onActivityResult(requestCode, resultCode, data);
+		if (requestCode == REQUEST_CHECK_SETTINGS) {
 
-            if (resultCode == RESULT_OK) {
+			if (resultCode == RESULT_OK) {
 
-                Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
-            } else {
+				Toast.makeText(getApplicationContext(), "GPS enabled", Toast.LENGTH_SHORT).show();
+			} else {
 
-                Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_SHORT).show();
-            }
+				Toast.makeText(getApplicationContext(), "GPS is not enabled", Toast.LENGTH_SHORT).show();
+			}
 
-        }
-    }
+		}
+	}
 }
