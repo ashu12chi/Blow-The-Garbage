@@ -22,10 +22,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="Name"
-			android:inputType="text"
-			android:textSize="18sp" />
+			android:inputType="text" />
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -43,10 +42,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText2"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="Mobile Number"
-			android:inputType="text"
-			android:textSize="18sp" />
+			android:inputType="text" />
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -64,10 +62,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText3"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="Address"
-			android:inputType="text"
-			android:textSize="18sp" />
+			android:inputType="text" />
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -86,10 +83,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText4"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="Password"
-			android:inputType="textPassword"
-			android:textSize="18sp" />
+			android:inputType="textPassword" />
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -108,10 +104,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText5"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="Repeat Password"
-			android:inputType="textPassword"
-			android:textSize="18sp" />
+			android:inputType="textPassword" />
 	</com.google.android.material.textfield.TextInputLayout>
 	<com.google.android.material.textfield.TextInputLayout
 		android:id="@+id/name_text_input6"
@@ -128,10 +123,9 @@
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/editText7"
 			android:layout_width="300dp"
-			android:layout_height="60dp"
+			android:layout_height="50dp"
 			android:hint="OTP"
-			android:inputType="textPassword"
-			android:textSize="18sp" />
+			android:inputType="textPassword" />
 	</com.google.android.material.textfield.TextInputLayout>
 
 	<Button

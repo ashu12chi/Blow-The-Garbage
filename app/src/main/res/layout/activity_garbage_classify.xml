@@ -1,22 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/activity_garbage_classify"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:paddingBottom="16dp"
-	android:paddingLeft="16dp"
-	android:paddingRight="16dp"
-	android:paddingTop="16dp"
+	android:orientation="vertical"
+	android:paddingBottom="8dp"
+	android:paddingLeft="8dp"
+	android:paddingRight="8dp"
+	android:paddingTop="8dp"
 	tools:context="com.npdevs.blowthegarbage.GarbageClassify">
 
 	<com.wonderkiln.camerakit.CameraView
 		android:id="@+id/cameraView"
 		android:layout_width="match_parent"
-		android:layout_height="600dp"
+		android:layout_height="500sp"
 		android:layout_gravity="center|top"
 		android:clickable="true"
+		android:elevation="8dp"
+		android:soundEffectsEnabled="true"
 		app:ckFlash="auto"
 		app:ckFocus="continuous"
 		app:ckPinchToZoom="true"
@@ -25,15 +28,15 @@
 
 	<LinearLayout
 		android:layout_width="match_parent"
-		android:layout_height="80dp"
+		android:layout_height="wrap_content"
 		android:layout_gravity="center|top"
-		android:layout_marginTop="520dp"
 		android:gravity="center"
 		android:orientation="horizontal">
 
 		<ImageView
 			android:id="@+id/imageViewResult"
 			android:layout_width="75dp"
+			android:elevation="8dp"
 			android:layout_height="75dp"
 			android:padding="2dp" />
 
@@ -44,8 +47,7 @@
 			android:fadeScrollbars="false"
 			android:gravity="center"
 			android:maxLines="15"
-			android:scrollbars="vertical"
-			android:textColor="@android:color/white" />
+			android:scrollbars="vertical" />
 	</LinearLayout>
 
 
@@ -54,7 +56,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="48dp"
 		android:layout_gravity="bottom|center"
-		android:layout_marginBottom="50dp"
 		android:text="Detect Object"
 		android:textColor="@android:color/black" />
 
@@ -66,4 +67,4 @@
 		android:text="Next"
 		android:textColor="@android:color/black" />
 
-</FrameLayout>
+</androidx.appcompat.widget.LinearLayoutCompat>
