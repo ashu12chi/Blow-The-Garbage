@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			progressDialog.setMessage("Logging In...");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
-
 			openOptionsPage();
 		}
 	}
@@ -212,6 +211,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 						{
 							Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(MainActivity.this,OptionsPage.class);
+							intent.putExtra("MOB_NUMBER",mob);
 							startActivity(intent);
 							progressDialog.cancel();
 						}

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -80,6 +81,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 	private String access_token="pk.eyJ1IjoibmlzaGNoYWwiLCJhIjoiY2swMHZxeXNqMHE3NjNkc2N5NTJndnN2dCJ9.O2DHCiqvsvdRulclqUYxmg";
 	private FloatingActionButton floatingActionButton;
 	private Button buttonConfirm;
+	private String MOB_NUMBER;
 	private DatabaseReference myRef;
 
 	@Override
@@ -94,6 +96,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		Mapbox.getInstance(this,access_token);
 
 		FirebaseApp.initializeApp(this);
+		MOB_NUMBER = getIntent().getStringExtra("MOB_NUMBER");
 		myRef = FirebaseDatabase.getInstance().getReference("garbage-request");
 
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -118,6 +121,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 				location[0]=latLng.latitude;
 				location[1]=latLng.longitude;
 				intent.putExtra("Location",location);
+				intent.putExtra("MOB_NUMBER",MOB_NUMBER);
 				startActivity(intent);
 			}
 		});
@@ -372,11 +376,30 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 			@Override
 			public void onClick(DialogInterface dialogInterface, int i) {
 				String key1=marker1.getSnippet();
-				String key=key1.substring(key1.lastIndexOf(':')+2);
-				int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+				final String key=key1.substring(key1.lastIndexOf(':')+2);
+				final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
 				System.out.println(key+" "+up);
-				myRef.child(key).child("upvotes").setValue(up+1);
-				showGarbages();
+				DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
+				databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+					@Override
+					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+						Garbage data=dataSnapshot.getValue(Garbage.class);
+						if(!data.getUpvoters().contains(MOB_NUMBER)) {
+							data.getUpvoters().add(MOB_NUMBER);
+							data.setUpvotes(up+1);
+							myRef.child(key).setValue(data);
+							showGarbages();
+						}
+						else {
+							Toast.makeText(getApplicationContext(),"Already voted!!!",Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onCancelled(@NonNull DatabaseError databaseError) {
+						Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		});
 
@@ -389,11 +412,30 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE," DOWNVOTE ", new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				String key1=marker1.getSnippet();
-				String key=key1.substring(key1.lastIndexOf(':')+2);
-				int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+				final String key=key1.substring(key1.lastIndexOf(':')+2);
+				final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
 				System.out.println(key+" "+up);
-				myRef.child(key).child("upvotes").setValue(up-1);
-				showGarbages();
+				DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
+				databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+					@Override
+					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+						Garbage data=dataSnapshot.getValue(Garbage.class);
+						if(!data.getUpvoters().contains(MOB_NUMBER)) {
+							data.getUpvoters().add(MOB_NUMBER);
+							data.setUpvotes(up-1);
+							myRef.child(key).setValue(data);
+							showGarbages();
+						}
+						else {
+							Toast.makeText(getApplicationContext(),"Already voted!!!",Toast.LENGTH_SHORT).show();
+						}
+					}
+
+					@Override
+					public void onCancelled(@NonNull DatabaseError databaseError) {
+						Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
+					}
+				});
 			}
 		});
 

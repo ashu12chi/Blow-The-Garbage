@@ -1,5 +1,6 @@
 package com.npdevs.blowthegarbage;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
@@ -34,6 +35,7 @@ import com.wonderkiln.camerakit.CameraKitImage;
 import com.wonderkiln.camerakit.CameraKitVideo;
 import com.wonderkiln.camerakit.CameraView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -54,7 +56,8 @@ public class GarbageClassify extends AppCompatActivity {
 	private StorageReference storageReference;
 	private DatabaseReference databaseReference;
 	private long time=System.currentTimeMillis();
-
+	private String MOB_NUMBER;
+	private ArrayList<String> upvoters;
 	private Executor executor = Executors.newSingleThreadExecutor();
 	private TextView textViewResult;
 	private Button btnDetectObject, btnNext;
@@ -70,7 +73,8 @@ public class GarbageClassify extends AppCompatActivity {
 		imageViewResult = findViewById(R.id.imageViewResult);
 		textViewResult = findViewById(R.id.textViewResult);
 		textViewResult.setMovementMethod(new ScrollingMovementMethod());
-
+		Intent intent = getIntent();
+		MOB_NUMBER = intent.getStringExtra("MOB_NUMBER");
 		FirebaseApp.initializeApp(this);
 
 		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -136,7 +140,7 @@ public class GarbageClassify extends AppCompatActivity {
 
 						getDeviceLocation();
 						Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
-						Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true,"No-url");
+						Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true,"No-url",MOB_NUMBER,upvoters);
 						String uploadID = time + "";
 						databaseReference.child(uploadID).setValue(garbageUpload);
 					} else {

@@ -8,6 +8,7 @@ import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
@@ -31,6 +32,8 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+
 public class UploadActivity extends AppCompatActivity {
 	private EditText description;
 	private ImageView imageView;
@@ -44,6 +47,8 @@ public class UploadActivity extends AppCompatActivity {
 	private boolean organic;
 	private long time = System.currentTimeMillis();
 	private LatLng latLng;
+	private String MOB_NUMBER="ashu";
+	private ArrayList<String> upvoters;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,8 +62,11 @@ public class UploadActivity extends AppCompatActivity {
 		radioButton3 = findViewById(R.id.radioButton4);
 		progressBar = findViewById(R.id.progressBar2);
 		choose = findViewById(R.id.button2);
+		upvoters = new ArrayList<>();
 		upload = findViewById(R.id.button4);
-		double[] location=getIntent().getDoubleArrayExtra("Location");
+		Intent intent = getIntent();
+		MOB_NUMBER = intent.getStringExtra("MOB_NUMBER");
+		double[] location=intent.getDoubleArrayExtra("Location");
 		assert location != null;
 		latLng=new LatLng(location[0],location[1]);
 		FirebaseApp.initializeApp(this);
@@ -145,7 +153,9 @@ public class UploadActivity extends AppCompatActivity {
 								@Override
 								public void onSuccess(Uri uri) {
 									String url = uri.toString();
-									Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,0,false,url);
+									upvoters.add(MOB_NUMBER);
+									Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,1,false,url,MOB_NUMBER,upvoters);
+								//	Log.e("ashu",MOB_NUMBER);
 									String uploadID = time+"";
 									databaseReference.child(uploadID).setValue(garbage);
 								}

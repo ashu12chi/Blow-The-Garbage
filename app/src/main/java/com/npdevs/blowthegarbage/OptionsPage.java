@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 public class OptionsPage extends AppCompatActivity {
 	private CardView text,text2,text3,text4;
+	String MOB_NUMBER;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -19,6 +20,8 @@ public class OptionsPage extends AppCompatActivity {
 		text3 = findViewById(R.id.cardView2);
 		text2 = findViewById(R.id.cardView3);
 		text4 = findViewById(R.id.cardView4);
+		Intent intent = getIntent();
+		MOB_NUMBER=intent.getStringExtra("MOB_NUMBER");
 		text.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
@@ -33,18 +36,15 @@ public class OptionsPage extends AppCompatActivity {
 		});
 	}
 
-	private void openUploadActivity() {
-		Intent intent = new Intent(this,UploadActivity.class);
-		startActivity(intent);
-	}
-
 	private void openGarbageClassifyActivity() {
 		Intent intent = new Intent(this,GarbageClassify.class);
+		intent.putExtra("MOB_NUMBER",MOB_NUMBER);
 		startActivity(intent);
 	}
 
 	private void openMapsSelectLocationActivity() {
 		Intent intent=new Intent(this,MapsSelectLocation.class);
+		intent.putExtra("MOB_NUMBER",MOB_NUMBER);
 		startActivity(intent);
 	}
 }

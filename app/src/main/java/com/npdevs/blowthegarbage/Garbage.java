@@ -1,5 +1,7 @@
 package com.npdevs.blowthegarbage;
 
+import java.util.ArrayList;
+
 public class Garbage {
 
 	private String description;
@@ -10,12 +12,13 @@ public class Garbage {
 	private int upvotes;
 	private boolean verified;
 	private String url;
-
+	private String mobNumber;
+	private ArrayList<String> upvoters;
 	public Garbage(){
 		//empty
 	}
 
-	public Garbage(String description, boolean severe, boolean organic, double latitude, double longitude, int upvotes,boolean verified,String url)
+	public Garbage(String description, boolean severe, boolean organic, double latitude, double longitude, int upvotes,boolean verified,String url,String mobNumber,ArrayList<String> upvoters)
 	{
 		if(description.trim().equals("")){
 			description = "No Name";
@@ -28,11 +31,21 @@ public class Garbage {
 		this.upvotes=upvotes;
 		this.verified=verified;
 		this.url=url;
+		this.mobNumber=mobNumber;
+		this.upvoters=upvoters;
 	}
 
 	public String getDescription()
 	{
 		return description;
+	}
+
+	public ArrayList<String> getUpvoters() {
+		return upvoters;
+	}
+
+	public void setUpvoters(ArrayList<String> upvoters) {
+		this.upvoters = upvoters;
 	}
 
 	public boolean getSevere(){
@@ -61,6 +74,14 @@ public class Garbage {
 
 	public int getUpvotes() {
 		return upvotes;
+	}
+
+	public String getMobNumber() {
+		return mobNumber;
+	}
+
+	public void setMobNumber(String mobNumber) {
+		this.mobNumber = mobNumber;
 	}
 
 	public boolean getVerified() {
