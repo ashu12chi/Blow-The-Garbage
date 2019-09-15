@@ -38,7 +38,6 @@ import java.util.List;
 import timber.log.Timber;
 
 public class Admin extends AppCompatActivity {
-	private String ashu = "Ashu";
 	private RecyclerView recyclerView;
 	private DatabaseReference databaseReference;
 	private StorageReference storageReference;
@@ -80,12 +79,6 @@ public class Admin extends AppCompatActivity {
 
 			}
 		});
-      /*  String url = "https://firebasestorage.googleapis.com/v0/b/blow-the-garbage.appspot.com/o/garbage-request%2F1567827232377.jpg?alt=media&token=e2d2a8ab-dcc7-416d-a7d0-966c207df274";
-     msampleItem.add(new SampleItem("ashu",true,true,2,url,approved,disapproved));
-        msampleItem.add(new SampleItem("ashu",true,true,2,url,approved,disapproved));
-        msampleItem.add(new SampleItem("ashu",true,true,2,url,approved,disapproved));
-        msampleItem.add(new SampleItem("ashu",true,true,2,url,approved,disapproved));
-        msampleItem.add(new SampleItem("ashu",true,true,2,url,approved,disapproved));*/
 	}
 	private class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 

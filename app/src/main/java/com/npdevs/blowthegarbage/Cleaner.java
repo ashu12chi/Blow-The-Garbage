@@ -4,6 +4,9 @@ public class Cleaner {
 	private String name,mobNo,add,pass;
 	private double range,latitude,longitude;
 
+	public Cleaner() {
+	}
+
 	public Cleaner(String name, String mobNo, String add, String pass, double range, double latitude, double longitude) {
 		this.name = name;
 		this.mobNo = mobNo;

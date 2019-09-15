@@ -136,15 +136,20 @@ public class GarbageClassify extends AppCompatActivity {
 				Log.e("Ashu",isGarbage+"");
 				try {
 					if (isGarbage) {
-						Toast.makeText(GarbageClassify.this, "Verified!!!", Toast.LENGTH_SHORT).show();
-
 						getDeviceLocation();
-						Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
-						Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true,"No-url",MOB_NUMBER,upvoters);
-						String uploadID = time + "";
-						databaseReference.child(uploadID).setValue(garbageUpload);
+						try {
+							Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
+							Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true, "No-url", MOB_NUMBER, upvoters);
+							String uploadID = time + "";
+							databaseReference.child(uploadID).setValue(garbageUpload);
+							Toast.makeText(GarbageClassify.this, "Verified!!!", Toast.LENGTH_SHORT).show();
+							finish();
+						}
+						catch (Exception e) {
+							Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease try again", Toast.LENGTH_LONG).show();
+						}
 					} else {
-						Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verification", Toast.LENGTH_LONG).show();
+						Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verification or try again ", Toast.LENGTH_LONG).show();
 					}
 				} catch (Exception e) {
 					Log.e("LOC",e.toString());

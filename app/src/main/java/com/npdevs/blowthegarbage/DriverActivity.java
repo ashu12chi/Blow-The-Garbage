@@ -1,10 +1,30 @@
 package com.npdevs.blowthegarbage;
 
-import android.graphics.BitmapFactory;
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.mapbox.android.core.permissions.PermissionsListener;
+import com.mapbox.android.core.permissions.PermissionsManager;
 import com.mapbox.api.directions.v5.DirectionsCriteria;
 import com.mapbox.api.directions.v5.models.DirectionsRoute;
 import com.mapbox.api.optimization.v1.MapboxOptimization;
@@ -14,45 +34,33 @@ import com.mapbox.geojson.FeatureCollection;
 import com.mapbox.geojson.LineString;
 import com.mapbox.geojson.Point;
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.Icon;
+import com.mapbox.mapboxsdk.annotations.IconFactory;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
+import com.mapbox.mapboxsdk.location.LocationComponent;
+import com.mapbox.mapboxsdk.location.LocationComponentActivationOptions;
+import com.mapbox.mapboxsdk.location.modes.CameraMode;
+import com.mapbox.mapboxsdk.location.modes.RenderMode;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.maps.Style;
 import com.mapbox.mapboxsdk.style.layers.LineLayer;
-import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import timber.log.Timber;
 
 import static com.mapbox.core.constants.Constants.PRECISION_6;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconIgnorePlacement;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconOffset;
-import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconSize;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineColor;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.lineWidth;
 
-// classes needed to add the location component
-import com.mapbox.android.core.permissions.PermissionsListener;
-import com.mapbox.android.core.permissions.PermissionsManager;
-import com.mapbox.mapboxsdk.location.LocationComponent;
-import com.mapbox.mapboxsdk.location.modes.CameraMode;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
-import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
-
-
-public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback,
-		MapboxMap.OnMapClickListener, MapboxMap.OnMapLongClickListener, PermissionsListener {
+public class DriverActivity extends AppCompatActivity implements OnMapReadyCallback, MapboxMap.OnMapLongClickListener, PermissionsListener {
 
 	private static final String ICON_GEOJSON_SOURCE_ID = "icon-source-id";
 	private static final String FIRST = "first";
@@ -65,10 +73,15 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 	private MapboxOptimization optimizedClient;
 	private List<Point> stops = new ArrayList<>();
 	private Point origin;
-	// variables for adding location layer
-	private PermissionsManager permissionsManager;
-	private LocationComponent locationComponent;
 
+	private PermissionsManager permissionsManager;
+	private String mobNo;
+	private DatabaseReference myRef,garbageRef;
+	private LatLng cleanerStart;
+	private Cleaner cleaner;
+	private double cleanerRange;
+	IconFactory iconFactory;
+	Icon icon;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +92,84 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		Mapbox.getInstance(this, getString(R.string.access_token));
 
 		// This contains the MapView in XML and needs to be called after the access token is configured.
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_driver);
+
+		iconFactory = IconFactory.getInstance(DriverActivity.this);
+		icon = iconFactory.fromResource(R.drawable.map_marker_dark);
+
+		mobNo=getIntent().getStringExtra("MOB_NUMBER");
+		FirebaseApp.initializeApp(this);
+		myRef= FirebaseDatabase.getInstance().getReference("cleaners/"+mobNo);
+
+		// to get Driver's start point and other data
+		myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				try {
+					cleaner = dataSnapshot.getValue(Cleaner.class);
+					assert cleaner != null;
+					cleanerStart = new LatLng(cleaner.getLatitude(), cleaner.getLongitude());
+					cleanerRange=cleaner.getRange()*1000.0;
+				}catch(Exception e) {
+					Toast.makeText(getApplicationContext(),"User data is corrupt",Toast.LENGTH_LONG).show();
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				Toast.makeText(getApplicationContext(),"Some error occurred",Toast.LENGTH_LONG).show();
+				finish();
+			}
+		});
+		garbageRef= FirebaseDatabase.getInstance().getReference("garbage-request");
+
+		showGarbages();
+
 
 		// Setup the MapView
 		mapView = findViewById(R.id.mapView);
 		mapView.onCreate(savedInstanceState);
 		mapView.getMapAsync(this);
+	}
+
+	private void showGarbages() {
+		garbageRef.addValueEventListener(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				Log.e("TAG","GB count "+dataSnapshot.getChildrenCount());
+				for(DataSnapshot postSnapshot:dataSnapshot.getChildren()) {
+					Garbage post=postSnapshot.getValue(Garbage.class);
+					LatLng garLatLng=new LatLng(post.getLatitude(),post.getLongitude());
+					if(garLatLng.distanceTo(cleanerStart)<=cleanerRange && post.getVerified()) {
+						Log.e("TAG","In range "+postSnapshot.getKey());
+
+						// Optimization API is limited to 12 coordinate sets
+						if (alreadyTwelveMarkersOnMap()) {
+							Toast.makeText(DriverActivity.this, "Only 12 steps allowed", Toast.LENGTH_LONG).show();
+						} else {
+							Style style = mapboxMap.getStyle();
+							if (style != null) {
+//								addDestinationMarker(style, garLatLng);
+								mapboxMap.addMarker(new MarkerOptions()
+								.position(garLatLng)
+								.title("Garbage here")
+								.snippet("Pick this"))
+								.setIcon(icon);
+								addPointToStopsList(garLatLng);
+								getOptimizedRoute(style, stops);
+							}
+						}
+					}
+					else
+						Log.e("TAG","Not in range "+postSnapshot.getKey());
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+
+			}
+		});
 	}
 
 	@Override
@@ -98,34 +183,13 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 				// Add the origin Point to the list
 				addFirstStopToStopsList();
 
-				// Add origin and destination to the mapboxMap
-				initMarkerIconSymbolLayer(style);
 				initOptimizedRouteLineLayer(style);
-				Toast.makeText(DriverActivity.this, "Tap on map to place markers", Toast.LENGTH_SHORT).show();
-				mapboxMap.addOnMapClickListener(DriverActivity.this);
+
 				mapboxMap.addOnMapLongClickListener(DriverActivity.this);
 			}
 		});
 	}
 
-	private void initMarkerIconSymbolLayer(@NonNull Style loadedMapStyle) {
-		// Add the marker image to map
-		loadedMapStyle.addImage("icon-image", BitmapFactory.decodeResource(
-				this.getResources(), R.drawable.map_marker_light));
-
-		// Add the source to the map
-
-		loadedMapStyle.addSource(new GeoJsonSource(ICON_GEOJSON_SOURCE_ID,
-				Feature.fromGeometry(Point.fromLngLat(origin.longitude(), origin.latitude()))));
-
-		loadedMapStyle.addLayer(new SymbolLayer("icon-layer-id", ICON_GEOJSON_SOURCE_ID).withProperties(
-				iconImage("icon-image"),
-				iconSize(1f),
-				iconAllowOverlap(true),
-				iconIgnorePlacement(true),
-				iconOffset(new Float[] {0f, -7f})
-		));
-	}
 
 	private void initOptimizedRouteLineLayer(@NonNull Style loadedMapStyle) {
 		loadedMapStyle.addSource(new GeoJsonSource("optimized-route-source-id"));
@@ -134,22 +198,6 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 						lineColor(Color.parseColor(TEAL_COLOR)),
 						lineWidth(POLYLINE_WIDTH)
 				), "icon-layer-id");
-	}
-
-	@Override
-	public boolean onMapClick(@NonNull LatLng point) {
-		// Optimization API is limited to 12 coordinate sets
-		if (alreadyTwelveMarkersOnMap()) {
-			Toast.makeText(DriverActivity.this, "Only 12 steps allowed", Toast.LENGTH_LONG).show();
-		} else {
-			Style style = mapboxMap.getStyle();
-			if (style != null) {
-				addDestinationMarker(style, point);
-				addPointToStopsList(point);
-				getOptimizedRoute(style, stops);
-			}
-		}
-		return true;
 	}
 
 	@Override
@@ -185,28 +233,48 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		return stops.size() == 12;
 	}
 
-	private void addDestinationMarker(@NonNull Style style, LatLng point) {
-		List<Feature> destinationMarkerList = new ArrayList<>();
-		for (Point singlePoint : stops) {
-			destinationMarkerList.add(Feature.fromGeometry(
-					Point.fromLngLat(singlePoint.longitude(), singlePoint.latitude())));
-		}
-		destinationMarkerList.add(Feature.fromGeometry(Point.fromLngLat(point.getLongitude(), point.getLatitude())));
-		GeoJsonSource iconSource = style.getSourceAs(ICON_GEOJSON_SOURCE_ID);
-		if (iconSource != null) {
-			iconSource.setGeoJson(FeatureCollection.fromFeatures(destinationMarkerList));
-		}
-	}
-
 	private void addPointToStopsList(LatLng point) {
 		stops.add(Point.fromLngLat(point.getLongitude(), point.getLatitude()));
 	}
 
 	private void addFirstStopToStopsList() {
 		// Set first stop
-		origin = Point.fromLngLat(locationComponent.getLastKnownLocation().getLongitude(),
-				locationComponent.getLastKnownLocation().getLatitude());
-		stops.add(origin);
+
+		LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+		Criteria criteria = new Criteria();
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION);
+		}
+		Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
+		if (location != null) {
+			double lat = location.getLatitude();
+			double longi = location.getLongitude();
+			origin=Point.fromLngLat(longi,lat);
+			stops.add(origin);
+			Log.d("NSP", "zoomMyCuurentLocation: location not null");
+		} else {
+			setMyLastLocation();
+		}
+	}
+	private void setMyLastLocation() {
+		Log.d("NSP", "setMyLastLocation: excecute, and get last location");
+		FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			return;
+		}
+		fusedLocationClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+			@Override
+			public void onSuccess(Location location) {
+				if (location != null){
+					double lat = location.getLatitude();
+					double longi = location.getLongitude();
+					LatLng latLng = new LatLng(lat,longi);
+					origin=Point.fromLngLat(longi,lat);
+					stops.add(origin);
+					Log.d("NSP", "MyLastLocation coordinate :"+latLng);
+				}
+			}
+		});
 	}
 
 	private void getOptimizedRoute(@NonNull final Style style, List<Point> coordinates) {
@@ -223,14 +291,14 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 			@Override
 			public void onResponse(Call<OptimizationResponse> call, Response<OptimizationResponse> response) {
 				if (!response.isSuccessful()) {
-					Timber.d("NO SUCCESS");
+					Log.e("NSP","NO SUCCESS");
 					Toast.makeText(DriverActivity.this, "NO SUCCESS", Toast.LENGTH_SHORT).show();
 				} else {
 					if (response.body() != null) {
 						List<DirectionsRoute> routes = response.body().trips();
 						if (routes != null) {
 							if (routes.isEmpty()) {
-								Timber.d("%s size = %s", "SUCCESSFUL BUT NO ROUTES", routes.size());
+								Log.e("NSP","%s size = %s SUCCESSFUL BUT NO ROUTES "+routes.size());
 								Toast.makeText(DriverActivity.this, "SUCCESSFUL BUT NO ROUTES",
 										Toast.LENGTH_SHORT).show();
 							} else {
@@ -241,16 +309,16 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 //										.directionsRoute(optimizedRoute)
 //										.shouldSimulateRoute(true)
 //										.build();
-//// Call this method with Context from within an Activity
-//								NavigationLauncher.startNavigation(MainActivity.this, options);
+//                              // Call this method with Context from within an Activity
+//								NavigationLauncher.startNavigation(DriverActivity.this, options);
 							}
 						} else {
-							Timber.d("list of routes in the response is null");
+							Log.e("NSP","list of routes in the response is null");
 							Toast.makeText(DriverActivity.this, String.format("NULL RESPONSE",
 									"The Optimization API response's list of routes"), Toast.LENGTH_SHORT).show();
 						}
 					} else {
-						Timber.d("response.body() is null");
+						Log.e("NSP","response.body() is null");
 						Toast.makeText(DriverActivity.this, String.format("NULL RESPONSE",
 								"The Optimization API response's body"), Toast.LENGTH_SHORT).show();
 					}
@@ -259,7 +327,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
 			@Override
 			public void onFailure(Call<OptimizationResponse> call, Throwable throwable) {
-				Timber.d("Error: %s", throwable.getMessage());
+				Log.e("NSP","Error: %s "+throwable.getMessage());
 			}
 		});
 	}
@@ -272,19 +340,32 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		}
 	}
 	@SuppressWarnings( {"MissingPermission"})
-	private void enableLocationComponent(@NonNull Style loadedMapStyle) {
+	private void enableLocationComponent(Style style) {
+
 		// Check if permissions are enabled and if not request
 		if (PermissionsManager.areLocationPermissionsGranted(this)) {
-			// Activate the MapboxMap LocationComponent to show user location
-			// Adding in LocationComponentOptions is also an optional parameter
-			locationComponent = mapboxMap.getLocationComponent();
-			locationComponent.activateLocationComponent(this, loadedMapStyle);
+
+			// Get an instance of the component
+			LocationComponent locationComponent = mapboxMap.getLocationComponent();
+
+			// Activate with a built LocationComponentActivationOptions object
+			locationComponent.activateLocationComponent(LocationComponentActivationOptions.builder(this, style).build());
+
+			// Enable to make component visible
 			locationComponent.setLocationComponentEnabled(true);
+
 			// Set the component's camera mode
 			locationComponent.setCameraMode(CameraMode.TRACKING);
+
+			// Set the component's render mode
+			locationComponent.setRenderMode(RenderMode.COMPASS);
+
 		} else {
+
 			permissionsManager = new PermissionsManager(this);
+
 			permissionsManager.requestLocationPermissions(this);
+
 		}
 	}
 
@@ -345,9 +426,6 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		// Cancel the directions API request
 		if (optimizedClient != null) {
 			optimizedClient.cancelCall();
-		}
-		if (mapboxMap != null) {
-			mapboxMap.removeOnMapClickListener(this);
 		}
 		mapView.onDestroy();
 	}

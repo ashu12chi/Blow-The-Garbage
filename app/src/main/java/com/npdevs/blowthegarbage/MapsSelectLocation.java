@@ -12,8 +12,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -24,7 +22,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -245,7 +242,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
 				.addLocationRequest(locationRequest);
 		builder.setAlwaysShow(true);
-		PendingResult result =
+		PendingResult<com.google.android.gms.location.LocationSettingsResult> result =
 				LocationServices.SettingsApi.checkLocationSettings(
 						mGoogleApiClient,
 						builder.build()

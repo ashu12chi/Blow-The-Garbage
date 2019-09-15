@@ -89,7 +89,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 
 			@Override
 			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-				if(charSequence.length()!=10){
+				if(charSequence.length()==0) {
+					textInputLayout1.setError("Field can't be left empty!");
+				}
+				else if(charSequence.charAt(0)=='D' && charSequence.length()!=11) {
+					textInputLayout1.setError("Enter valid ID!");
+				}
+				else if(charSequence.charAt(0)!='D' && charSequence.length()!=10){
 					textInputLayout1.setError("Enter 10 digit Mobile Number!");
 				}
 				else
@@ -162,17 +168,22 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 	private void login() {
 		mobNo=mobNumber.getText().toString();
 		pswd=password.getText().toString();
-		if(mobNo.equals("987") && pswd.equals("987"))
+		if(mobNo.equals("A987") && pswd.equals("A987"))
 		{
 			Intent intent = new Intent(MainActivity.this,Admin.class);
 			startActivity(intent);
 		}
-		if(mobNo.equals("9876") && pswd.equals("9876"))
+		if(mobNo.equals("R987") && pswd.equals("R987"))
 		{
 			Intent intent = new Intent(MainActivity.this,DriverRegisterActivity.class);
 			startActivity(intent);
 		}
-		if(mobNo.isEmpty() || mobNo.length()<10)
+		if(mobNo.charAt(0)=='D' && mobNo.length()!=11) {
+			textInputLayout1.setError("Enter valid ID!");
+			mobNumber.requestFocus();
+			return;
+		}
+		if(mobNo.charAt(0)!='D' && mobNo.length()!=10)
 		{
 			textInputLayout1.setError("Enter 10 digit Mobile Number!");
 			mobNumber.requestFocus();
@@ -187,8 +198,66 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			progressDialog.setMessage("Logging In...");
 			progressDialog.setCancelable(false);
 			progressDialog.show();
-			openOptionsPage();
+			if (mobNo.charAt(0)=='D')
+				openDriverActivity();
+			else
+				openOptionsPage();
 		}
+	}
+
+	private void openDriverActivity() {
+		DatabaseReference myRef= FirebaseDatabase.getInstance().getReference("cleaners");
+		myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+			@Override
+			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				String mob=mobNumber.getText().toString().substring(1);
+				String pwd=password.getText().toString();
+				MessageDigest digest = null;
+				try {
+					digest = MessageDigest.getInstance("SHA-256");
+				} catch (NoSuchAlgorithmException e) {
+					e.printStackTrace();
+				}
+				assert digest != null;
+				byte[] pasd = digest.digest(pwd.getBytes(StandardCharsets.UTF_8));
+				pwd= Arrays.toString(pasd);
+				if(dataSnapshot.child(mob).exists())
+				{
+					if(!mob.isEmpty())
+					{
+						Cleaner login=dataSnapshot.child(mob).getValue(Cleaner.class);
+						if(login.getPass().equals(pwd))
+						{
+							Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
+							Intent intent = new Intent(MainActivity.this,DriverActivity.class);
+							intent.putExtra("MOB_NUMBER",mob);
+							startActivity(intent);
+							progressDialog.cancel();
+						}
+						else {
+							Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
+							progressDialog.cancel();
+						}
+					}
+					else
+					{
+						Toast.makeText(getApplicationContext(),"Enter valid ID!",Toast.LENGTH_LONG).show();
+						progressDialog.cancel();
+					}
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(),"User is not registered!",Toast.LENGTH_LONG).show();
+					progressDialog.cancel();
+				}
+			}
+
+			@Override
+			public void onCancelled(@NonNull DatabaseError databaseError) {
+				Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
+				progressDialog.cancel();
+			}
+		});
 	}
 
 	private void openOptionsPage() {
