@@ -61,6 +61,8 @@ import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.PlaceAutocomplete;
 import com.mapbox.mapboxsdk.plugins.places.autocomplete.model.PlaceOptions;
 
+import java.util.ArrayList;
+
 public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback {
 
 	private GoogleMap mMap;
@@ -381,14 +383,22 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 					@Override
 					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 						Garbage data=dataSnapshot.getValue(Garbage.class);
-						if(!data.getUpvoters().contains(MOB_NUMBER)) {
-							data.getUpvoters().add(MOB_NUMBER);
-							data.setUpvotes(up+1);
+						if(data.getUpvoters()!=null) {
+							if (!data.getUpvoters().contains(MOB_NUMBER)) {
+								data.getUpvoters().add(MOB_NUMBER);
+								data.setUpvotes(up + 1);
+								myRef.child(key).setValue(data);
+								showGarbages();
+							} else {
+								Toast.makeText(getApplicationContext(), "Already voted!!!", Toast.LENGTH_SHORT).show();
+							}
+						}else {
+							data.setUpvotes(1);
+							ArrayList<String> a=new ArrayList<>();
+							a.add(MOB_NUMBER);
+							data.setUpvoters(a);
 							myRef.child(key).setValue(data);
 							showGarbages();
-						}
-						else {
-							Toast.makeText(getApplicationContext(),"Already voted!!!",Toast.LENGTH_SHORT).show();
 						}
 					}
 

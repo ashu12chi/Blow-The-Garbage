@@ -14,7 +14,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.2"
+		app:layout_constraintVertical_bias="0.3"
 		app:srcCompat="@drawable/images" />
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -27,7 +27,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.5">
+		app:layout_constraintVertical_bias="0.45">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/mobNumber"
@@ -48,7 +48,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.65">
+		app:layout_constraintVertical_bias="0.55">
 
 		<com.google.android.material.textfield.TextInputEditText
 			android:id="@+id/password"
@@ -67,7 +67,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/name_text_input2"
-		app:layout_constraintVertical_bias="0.2" />
+		app:layout_constraintVertical_bias="0.05" />
 
 	<Button
 		android:id="@+id/button3"
@@ -78,7 +78,7 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/login"
-		app:layout_constraintVertical_bias="0.16" />
+		app:layout_constraintVertical_bias="0.05" />
 
 	<Button
 		android:id="@+id/about"
@@ -93,6 +93,6 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintHorizontal_bias="0.96"
-		app:layout_constraintVertical_bias="0.1" />
+		app:layout_constraintVertical_bias="0.08" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

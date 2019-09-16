@@ -132,20 +132,14 @@ public class Admin extends AppCompatActivity {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//       Bitmap resized = Bitmap.createScaledBitmap(bm, bm.getWidth()*6, bm.getHeight()*6, true);
+//			Bitmap resized = Bitmap.createScaledBitmap(bm, bm.getWidth()*6, bm.getHeight()*6, true);
 			holder.garbage.setImageBitmap(bm);
 			System.err.println(samples.get(position).getGarbage());
-			holder.approved.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
+			holder.approved.setOnClickListener(view -> {
 
-				}
 			});
-			holder.disapproved.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View view) {
+			holder.disapproved.setOnClickListener(view -> {
 
-				}
 			});
 		}
 

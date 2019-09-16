@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 //        Intent intent = new Intent(MainActivity.this,DriverRegisterActivity.class);
-//        startActivity(intent);
+//		intent.putExtra("MOBILE_NUMBER","8004344462");
+//        startActivity(intent);    // to debug
 		setContentView(R.layout.activity_main);
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addApi(LocationServices.API)
