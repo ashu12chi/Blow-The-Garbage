@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item android:id="@+id/register"
+        android:title="Register-Cleaner"
+        app:showAsAction="never"/>
+    <item android:id="@+id/feedback"
+        android:title="Feedback/Review"
+        app:showAsAction="never"/>
+    <item
+        android:id="@+id/organic"
+        android:title="Organic-Inorganic Pie"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/severe"
+        android:title="Severity Pie"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/garbage"
+        android:title="Garbage-Bar Graph"
+        app:showAsAction="never" />
+</menu>

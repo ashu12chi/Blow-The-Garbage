@@ -1,13 +1,15 @@
 package com.npdevs.blowthegarbage;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -19,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,14 +29,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.squareup.picasso.Picasso;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
-import timber.log.Timber;
 
 public class Admin extends AppCompatActivity {
 	private RecyclerView recyclerView;
@@ -45,6 +43,34 @@ public class Admin extends AppCompatActivity {
 	private Button disapproved;
 	//private Uri url;
 	List<SampleItem> msampleItem = new ArrayList<>();
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.admin_options, menu);
+		return true;
+	}
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//Display menu to user
+		switch (item.getItemId()) {
+			case R.id.register:
+
+			case R.id.feedback:
+
+			case R.id.organic:
+				Intent intent = new Intent(Admin.this,OrganicGraph.class);
+				startActivity(intent);
+				return true;
+			case R.id.severe:
+				Intent intent1 = new Intent(Admin.this,SevereGraph.class);
+				startActivity(intent1);
+				return true;
+			case R.id.garbage:
+				Intent intent2 = new Intent(Admin.this,BarGraph.class);
+				startActivity(intent2);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -148,4 +174,6 @@ public class Admin extends AppCompatActivity {
 			return samples.size();
 		}
 	}
+
+
 }

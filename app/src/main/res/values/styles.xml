@@ -54,4 +54,31 @@
 		<item name="cardMaxElevation">20dp</item>
 		<item name="cardCornerRadius">16dp</item>
 	</style>
+
+
+	<style name="AppTheme2" parent="Theme.MaterialComponents.Light">
+		<item name="colorPrimary">#ffffff</item>
+		<item name="colorPrimaryVariant">#000000</item>
+		<item name="colorPrimaryDark">#ffffff</item>
+		<item name="colorAccent">#000000</item>
+		<item name="colorOnPrimary">#FFFFFF</item>
+		<item name="colorSecondary">#ffffff</item>
+		<item name="colorSecondaryVariant">#000000</item>
+		<item name="colorOnSecondary">#FFFFFF</item>
+		<item name="colorError">#AD342B</item>
+		<item name="colorOnError">#FFFFFF</item>
+		<item name="colorSurface">#FFFFFF</item>
+		<item name="colorOnSurface">#000000</item>
+		<item name="android:colorBackground">@color/background</item>
+		<item name="colorOnBackground">#000000</item>
+		<item name="android:fontFamily">@font/google_sans</item>
+		<item name="android:textSize">17sp</item>
+		<item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
+		<item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
+		<item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
+		<item name="materialButtonStyle">@style/AppButton</item>
+		<item name="textInputStyle">@style/AppTextLayout</item>
+		<item name="materialCardViewStyle">@style/AppCard</item>
+		<item name="android:windowLightStatusBar">true</item>
+	</style>
 </resources>

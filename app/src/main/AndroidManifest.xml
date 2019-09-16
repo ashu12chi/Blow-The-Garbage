@@ -28,7 +28,8 @@
 			android:label="@string/title_activity_driver_register"></activity>
 
 		<activity android:name=".DriverActivity" />
-		<activity android:name=".Admin" />
+		<activity android:name=".Admin"
+			android:theme="@style/AppTheme2"/>
 		<activity
 			android:name=".MapsSelectLocation"
 			android:label="@string/title_activity_maps_select_location" />
