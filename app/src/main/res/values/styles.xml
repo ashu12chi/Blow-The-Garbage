@@ -1,13 +1,12 @@
 <resources>
 
 	<!-- Base application theme. -->
-	<style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+	<style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
 		<item name="colorPrimary">#000000</item>
 		<item name="colorPrimaryVariant">#000000</item>
-		<item name="colorPrimaryDark">#ffffff</item>
-		<item name="colorAccent">#000000</item>
 		<item name="colorOnPrimary">#FFFFFF</item>
-		<item name="colorSecondary">#ffffff</item>
+		<item name="colorPrimaryDark">#000000</item>
+		<item name="colorSecondary">#000000</item>
 		<item name="colorSecondaryVariant">#000000</item>
 		<item name="colorOnSecondary">#FFFFFF</item>
 		<item name="colorError">#AD342B</item>
@@ -17,14 +16,11 @@
 		<item name="android:colorBackground">@color/background</item>
 		<item name="colorOnBackground">#000000</item>
 		<item name="android:fontFamily">@font/google_sans</item>
-		<item name="android:textSize">17sp</item>
 		<item name="textAppearanceButton">@style/AppTextAppearance.Button</item>
 		<item name="shapeAppearanceSmallComponent">@style/AppShapeAppearance.SmallComponent</item>
 		<item name="shapeAppearanceMediumComponent">@style/AppShapeAppearance.MediumComponent</item>
 		<item name="materialButtonStyle">@style/AppButton</item>
 		<item name="textInputStyle">@style/AppTextLayout</item>
-		<item name="materialCardViewStyle">@style/AppCard</item>
-		<item name="android:windowLightStatusBar">true</item>
 	</style>
 
 	<style name="AppTextAppearance.Button" parent="TextAppearance.MaterialComponents.Button">

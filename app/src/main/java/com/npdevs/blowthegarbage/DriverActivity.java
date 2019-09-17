@@ -4,7 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -14,6 +17,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -172,6 +178,24 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		});
 	}
 
+	public boolean onCreateOptionsMenu(Menu menu) {
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.driver_options, menu);
+		return true;
+	}
+
+	public boolean onOptionsItemSelected(MenuItem item) {
+		//Display menu to user
+		switch (item.getItemId()) {
+			case R.id.logout:
+				clearTable();
+				saveTable();
+				finish();
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+	}
+
 	private void showGarbages() {
 		garbageRef.addValueEventListener(new ValueEventListener() {
 			@SuppressLint("LogNotTimber")
@@ -202,7 +226,9 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 								.snippet((post.getSevere()?"Severe":"Not Severe")+" +"+post.getUpvotes()+"\n"+post.getDescription()+"\nID: "+postSnapshot.getKey()))
 								.setIcon(icon);
 								stops.add(Point.fromLngLat(garLatLng.getLongitude(), garLatLng.getLatitude()));
-								getOptimizedRoute(style, stops);
+								if(stops.size()>=2) {
+									getOptimizedRoute(style, stops);
+								}
 							}
 						}
 					}
@@ -578,5 +604,21 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 
 			}
 		});
+	}
+
+	private void clearTable()
+	{
+		SharedPreferences preferences = getSharedPreferences("usersave", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.clear();
+		editor.commit();
+	}
+
+	private void saveTable()
+	{
+		SharedPreferences sharedPreferences=getSharedPreferences("usersave",MODE_PRIVATE);
+		SharedPreferences.Editor editor=sharedPreferences.edit();
+		editor.putString("User","no");
+		editor.apply();
 	}
 }

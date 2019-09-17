@@ -7,13 +7,19 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,13 +64,32 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 	private int REQUEST_LOCATION_PERMISSION=500;
 	private String mobNo;
 	private String pswd;
+	private String loggedIn;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        Intent intent = new Intent(MainActivity.this,Admin.class);
-//		intent.putExtra("MOBILE_NUMBER","8004344462");
-        startActivity(intent);    // to debug
+//		clearTable();
+		loadPreferences();
+		System.out.println(mobNo);
+		if(loggedIn.charAt(0)=='D') {
+			Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(MainActivity.this,DriverActivity.class);
+			intent.putExtra("MOB_NUMBER",loggedIn.substring(1));
+			startActivity(intent);
+			finish();
+		} else if(loggedIn.charAt(0)=='A') {
+			Intent intent = new Intent(MainActivity.this,Admin.class);
+			startActivity(intent);
+			finish();
+		}
+		else if(!loggedIn.equals("no")) {
+			Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
+			Intent intent = new Intent(MainActivity.this,OptionsPage.class);
+			intent.putExtra("MOB_NUMBER",loggedIn);
+			startActivity(intent);
+			finish();
+		}
 		setContentView(R.layout.activity_main);
 		mGoogleApiClient = new GoogleApiClient.Builder(this)
 				.addApi(LocationServices.API)
@@ -132,28 +157,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			}
 		});
 
-		about.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				openAboutActivity();
-			}
+		about.setOnClickListener(view -> openAboutActivity());
+		signup.setOnClickListener(view -> {
+			progressDialog=new ProgressDialog(MainActivity.this);
+			openSignUpActivity();
 		});
-		signup.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				progressDialog=new ProgressDialog(MainActivity.this);
-				openSignUpActivity();
-			}
-		});
-		login.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				progressDialog=new ProgressDialog(MainActivity.this);
-				login();
-			}
+		login.setOnClickListener(view -> {
+			progressDialog=new ProgressDialog(MainActivity.this);
+			login();
 		});
 
 		enableMyLocation();
+//		schedulealarm();
 	}
 	private void enableMyLocation() {
 		if (ContextCompat.checkSelfPermission(this,
@@ -171,8 +186,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 		pswd=password.getText().toString();
 		if(mobNo.equals("A987") && pswd.equals("A987"))
 		{
+			clearTable();
+			saveTable();
 			Intent intent = new Intent(MainActivity.this,Admin.class);
 			startActivity(intent);
+			finish();
 		}
 		if(mobNo.equals("R987") && pswd.equals("R987"))
 		{
@@ -229,11 +247,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 						Cleaner login=dataSnapshot.child(mob).getValue(Cleaner.class);
 						if(login.getPass().equals(pwd))
 						{
+							mobNo="D"+mob;
+							clearTable();
+							saveTable();
 							Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(MainActivity.this,DriverActivity.class);
 							intent.putExtra("MOB_NUMBER",mob);
 							startActivity(intent);
 							progressDialog.cancel();
+							finish();
 						}
 						else {
 							Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
@@ -284,11 +306,15 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 						Users login=dataSnapshot.child(mob).getValue(Users.class);
 						if(login.getPassword().equals(pwd))
 						{
+							mobNo=mob;
+							clearTable();
+							saveTable();
 							Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
 							Intent intent = new Intent(MainActivity.this,OptionsPage.class);
 							intent.putExtra("MOB_NUMBER",mob);
 							startActivity(intent);
 							progressDialog.cancel();
+							finish();
 						}
 						else {
 							Toast.makeText(getApplicationContext(),"Wrong Password!",Toast.LENGTH_LONG).show();
@@ -382,5 +408,44 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			}
 
 		}
+	}
+
+	private void loadPreferences()
+	{
+		SharedPreferences sharedPreferences=getSharedPreferences("usersave",MODE_PRIVATE);
+		loggedIn=sharedPreferences.getString("User","no");
+		if(loggedIn.equals("") || loggedIn.isEmpty() || loggedIn.equals("no"))
+			loggedIn="no";
+	}
+
+	private void clearTable()
+	{
+		SharedPreferences preferences = getSharedPreferences("usersave", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.clear();
+		editor.commit();
+	}
+
+	private void saveTable()
+	{
+		SharedPreferences sharedPreferences=getSharedPreferences("usersave",MODE_PRIVATE);
+		SharedPreferences.Editor editor=sharedPreferences.edit();
+		editor.putString("User",mobNo);
+		editor.apply();
+	}
+
+	private void schedulealarm() {
+
+		// Construct an intent that will execute the AlarmReceiver
+		Intent intent = new Intent(this, AlarmReciever.class);
+		// Create a PendingIntent to be triggered when the alarm goes off
+		final PendingIntent pIntent = PendingIntent.getBroadcast(this, AlarmReciever.REQUEST_CODE,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+		// Setup periodic alarm every every half hour from this point onwards
+		AlarmManager alarm = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+		// First parameter is the type: ELAPSED_REALTIME, ELAPSED_REALTIME_WAKEUP, RTC_WAKEUP
+		// Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
+		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(),
+				1000*40, pIntent);
 	}
 }

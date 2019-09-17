@@ -1,6 +1,9 @@
 package com.npdevs.blowthegarbage;
 
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -43,11 +46,13 @@ public class Admin extends AppCompatActivity {
 	private Button disapproved;
 	//private Uri url;
 	List<SampleItem> msampleItem = new ArrayList<>();
+
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.admin_options, menu);
 		return true;
 	}
+
 	public boolean onOptionsItemSelected(MenuItem item) {
 		//Display menu to user
 		switch (item.getItemId()) {
@@ -67,21 +72,32 @@ public class Admin extends AppCompatActivity {
 				Intent intent2 = new Intent(Admin.this,BarGraph.class);
 				startActivity(intent2);
 				return true;
+			case R.id.logout:
+				clearTable();
+				saveTable();
+				finish();
 			default:
 				return super.onOptionsItemSelected(item);
 		}
 	}
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin);
+		ProgressDialog progressDialog=new ProgressDialog(Admin.this);
+		progressDialog.setMessage("Loading...");
+		progressDialog.setCancelable(false);
+		progressDialog.show();
 		databaseReference = FirebaseDatabase.getInstance().getReference("garbage-request");
 		storageReference = FirebaseStorage.getInstance().getReference("garbage-request");
 		FirebaseApp.initializeApp(this);
 
-		databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+		databaseReference.addValueEventListener(new ValueEventListener() {
 			@Override
 			public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+				msampleItem.clear();
+				progressDialog.show();
 				for(DataSnapshot postSnapshot:dataSnapshot.getChildren())
 				{
 					Garbage post = postSnapshot.getValue(Garbage.class);
@@ -99,6 +115,7 @@ public class Admin extends AppCompatActivity {
 				recyclerView.setLayoutManager(layoutManager);
 				RecyclerView.Adapter adapter = new MainAdapter(msampleItem);
 				recyclerView.setAdapter(adapter);
+				progressDialog.cancel();
 			}
 			@Override
 			public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -175,5 +192,20 @@ public class Admin extends AppCompatActivity {
 		}
 	}
 
+	private void clearTable()
+	{
+		SharedPreferences preferences = getSharedPreferences("usersave", Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = preferences.edit();
+		editor.clear();
+		editor.commit();
+	}
+
+	private void saveTable()
+	{
+		SharedPreferences sharedPreferences=getSharedPreferences("usersave",MODE_PRIVATE);
+		SharedPreferences.Editor editor=sharedPreferences.edit();
+		editor.putString("User","no");
+		editor.apply();
+	}
 
 }

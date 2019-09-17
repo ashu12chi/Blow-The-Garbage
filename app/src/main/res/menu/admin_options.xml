@@ -19,4 +19,8 @@
         android:id="@+id/garbage"
         android:title="Garbage-Bar Graph"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/logout"
+        android:title="Logout"
+        app:showAsAction="never" />
 </menu>
