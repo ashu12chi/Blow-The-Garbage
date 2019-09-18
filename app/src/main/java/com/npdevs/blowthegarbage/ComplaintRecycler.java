@@ -1,7 +1,5 @@
 package com.npdevs.blowthegarbage;
 
-import com.google.android.gms.maps.model.LatLng;
-
 public class ComplaintRecycler {
 	private String complaint,longitude,latitude;
 

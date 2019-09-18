@@ -6,6 +6,7 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -85,7 +86,7 @@ public class AdminComplaint extends FragmentActivity implements OnMapReadyCallba
 				recyclerView.setHasFixedSize(true);
 				RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(AdminComplaint.this);
 				recyclerView.setLayoutManager(layoutManager);
-				RecyclerView.Adapter adapter = new AdminComplaint.MainAdapter(msampleItem);
+				Adapter adapter = new AdminComplaint.MainAdapter(msampleItem);
 				recyclerView.setAdapter(adapter);
 				progressDialog.cancel();
 			}
@@ -131,7 +132,7 @@ public class AdminComplaint extends FragmentActivity implements OnMapReadyCallba
 		});
 
 	}
-	private class MainAdapter extends RecyclerView.Adapter<AdminComplaint.MainAdapter.ViewHolder> {
+	private class MainAdapter extends Adapter<AdminComplaint.MainAdapter.ViewHolder> {
 
 		private List<ComplaintRecycler> samples;
 		class ViewHolder extends RecyclerView.ViewHolder {
@@ -163,8 +164,9 @@ public class AdminComplaint extends FragmentActivity implements OnMapReadyCallba
 
 		@Override
 		public void onBindViewHolder(@NonNull AdminComplaint.MainAdapter.ViewHolder holder, int position) {
-			holder.nameView.setText(samples.get(position).getComplaint());
+			holder.nameView.setText((position+1)+". "+samples.get(position).getComplaint());
 			holder.cardView.setOnClickListener(view -> {
+				mMap.clear();
 				LatLng latLng1 = new LatLng(Double.parseDouble(samples.get(position).getLatitude())
 						,Double.parseDouble(samples.get(position).getLongitude()));
 				Toast.makeText(getApplicationContext(),"Clicked!",Toast.LENGTH_SHORT).show();

@@ -8,8 +8,8 @@
 
 	<EditText
 		android:id="@+id/editText6"
-		android:layout_width="match_parent"
-		android:layout_height="101dp"
+		android:layout_width="347dp"
+		android:layout_height="133dp"
 		android:layout_marginStart="16dp"
 		android:layout_marginEnd="16dp"
 		android:ems="10"
@@ -17,22 +17,22 @@
 		android:inputType="textMultiLine"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.405"
+		app:layout_constraintHorizontal_bias="1.0"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/imageView"
-		app:layout_constraintVertical_bias="0.1" />
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintVertical_bias="0.012" />
 
 	<ImageView
 		android:id="@+id/imageView"
-		android:layout_width="327dp"
-		android:layout_height="266dp"
+		android:layout_width="288dp"
+		android:layout_height="232dp"
 		android:background="@drawable/images"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.452"
+		app:layout_constraintHorizontal_bias="0.01"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.07"
+		app:layout_constraintVertical_bias="0.037"
 		tools:srcCompat="@tools:sample/avatars" />
 
 	<RadioGroup
@@ -41,10 +41,10 @@
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.091"
+		app:layout_constraintHorizontal_bias="0.56"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/editText6"
-		app:layout_constraintVertical_bias="0.27">
+		app:layout_constraintVertical_bias="0.359">
 
 		<RadioButton
 			android:id="@+id/radioButton"
@@ -67,10 +67,10 @@
 		android:layout_height="wrap_content"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.853"
+		app:layout_constraintHorizontal_bias="1.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/editText6"
-		app:layout_constraintVertical_bias="0.27">
+		app:layout_constraintVertical_bias="0.38">
 
 		<RadioButton
 			android:id="@+id/radioButton4"
@@ -96,10 +96,10 @@
 		android:textSize="16sp"
 		app:layout_constraintBottom_toTopOf="@+id/radioGroup"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.072"
+		app:layout_constraintHorizontal_bias="0.6"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/editText6"
-		app:layout_constraintVertical_bias="0.57" />
+		app:layout_constraintVertical_bias="0.225" />
 
 	<TextView
 		android:id="@+id/textView2"
@@ -109,10 +109,10 @@
 		android:textSize="16sp"
 		app:layout_constraintBottom_toTopOf="@+id/radioGroup2"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.355"
+		app:layout_constraintHorizontal_bias="0.719"
 		app:layout_constraintStart_toEndOf="@+id/textView"
 		app:layout_constraintTop_toBottomOf="@+id/editText6"
-		app:layout_constraintVertical_bias="0.57" />
+		app:layout_constraintVertical_bias="0.217" />
 
 	<Button
 		android:id="@+id/button2"
@@ -121,10 +121,10 @@
 		android:text="Choose Photo"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.077"
+		app:layout_constraintHorizontal_bias="0.561"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/radioGroup"
-		app:layout_constraintVertical_bias="0.0" />
+		app:layout_constraintVertical_bias="0.439" />
 
 	<Button
 		android:id="@+id/button4"
@@ -133,19 +133,21 @@
 		android:text="Upload"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.354"
+		app:layout_constraintHorizontal_bias="0.684"
 		app:layout_constraintStart_toEndOf="@+id/button2"
 		app:layout_constraintTop_toBottomOf="@+id/radioGroup2"
-		app:layout_constraintVertical_bias="0.0" />
+		app:layout_constraintVertical_bias="0.403" />
 
 	<ProgressBar
 		android:id="@+id/progressBar2"
 		style="?android:attr/progressBarStyleHorizontal"
-		android:layout_width="383dp"
-		android:layout_height="13dp"
-		app:layout_constraintBottom_toTopOf="@+id/editText6"
+		android:layout_width="277dp"
+		android:layout_height="19dp"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintHorizontal_bias="0.035"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintTop_toBottomOf="@+id/imageView" />
+		app:layout_constraintTop_toBottomOf="@+id/imageView"
+		app:layout_constraintVertical_bias="0.136" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

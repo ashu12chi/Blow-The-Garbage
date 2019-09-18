@@ -69,6 +69,7 @@ public class GarbageClassify extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_garbage_classify);
+		getSupportActionBar().hide();
 		cameraView = findViewById(R.id.cameraView);
 		imageViewResult = findViewById(R.id.imageViewResult);
 		textViewResult = findViewById(R.id.textViewResult);
