@@ -33,6 +33,17 @@ public class OptionsPage extends AppCompatActivity {
 		text.setOnClickListener(view -> openGarbageClassifyActivity());
 		text3.setOnClickListener(view -> openMapsSelectLocationActivity());
 		text4.setOnClickListener(view -> openComplaintActivity());
+		text2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				openFeedbackActivity();
+			}
+		});
+	}
+
+	private void openFeedbackActivity() {
+		Intent intent = new Intent(this,FeedbackActivity.class);
+		startActivity(intent);
 	}
 
 	private void openComplaintActivity() {

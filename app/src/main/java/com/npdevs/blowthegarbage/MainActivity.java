@@ -191,11 +191,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			startActivity(intent);
 			finish();
 		}
-		if(mobNo.equals("R987") && pswd.equals("R987"))
-		{
-			Intent intent = new Intent(MainActivity.this,DriverRegisterActivity.class);
-			startActivity(intent);
-		}
 		if(mobNo.charAt(0)=='D' && mobNo.length()!=11) {
 			textInputLayout1.setError("Enter valid ID!");
 			mobNumber.requestFocus();

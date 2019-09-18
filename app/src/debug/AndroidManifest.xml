@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <application>
-        <activity android:name="com.npdevs.blowthegarbage.BarGraph"></activity>
+        <activity android:name="com.npdevs.blowthegarbage.FeedbackActivity"></activity>
+        <activity android:name="com.npdevs.blowthegarbage.BarGraph" />
         <activity android:name="com.npdevs.blowthegarbage.SevereGraph" />
         <activity android:name="com.npdevs.blowthegarbage.OrganicGraph" />
     </application>
