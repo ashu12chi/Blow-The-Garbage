@@ -4,12 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
-import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
@@ -73,44 +70,12 @@ public class UploadActivity extends AppCompatActivity {
 
 		storageReference = FirebaseStorage.getInstance().getReference("garbage-request");
 		databaseReference = FirebaseDatabase.getInstance().getReference("garbage-request");
-		choose.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				openFileChooser();
-			}
-		});
-		upload.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				//  Log.e("Ashu","Reached!!!");
-				uploadFile();
-				//Log.e("Ashu","Reached!!!");
-			}
-		});
-		radioButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				severe = true;
-			}
-		});
-		radioButton1.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				severe = false;
-			}
-		});
-		radioButton2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				organic = true;
-			}
-		});
-		radioButton3.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				organic = false;
-			}
-		});
+		choose.setOnClickListener(view -> openFileChooser());
+		upload.setOnClickListener(view -> uploadFile());
+		radioButton.setOnClickListener(view -> severe = true);
+		radioButton1.setOnClickListener(view -> severe = false);
+		radioButton2.setOnClickListener(view -> organic = true);
+		radioButton3.setOnClickListener(view -> organic = false);
 	}
 
 	private void openFileChooser() {
@@ -133,49 +98,27 @@ public class UploadActivity extends AppCompatActivity {
 		}
 	}
 	private void uploadFile(){
-		//  Log.e("Ashu","Reached!!!");
 		if(ImageUri!=null){
 			StorageReference fileReference = storageReference.child(time+"."+getFileExtension(ImageUri));
 			fileReference.putFile(ImageUri)
-					.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-						@SuppressLint("ShowToast")
-						@Override
-						public void onSuccess(final UploadTask.TaskSnapshot taskSnapshot) {
-							Handler handler = new Handler();
-							handler.postDelayed(new Runnable() {
-								@Override
-								public void run() {
-									progressBar.setProgress(0);
-								}
-							},3000);
-							Toast.makeText(UploadActivity.this,"Garbage Successful!",Toast.LENGTH_LONG);
-							storageReference.child(time+"."+getFileExtension(ImageUri)).getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-								@Override
-								public void onSuccess(Uri uri) {
-									String url = uri.toString();
-									upvoters.add(MOB_NUMBER);
-									Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,1,false,url,MOB_NUMBER,upvoters);
-								//	Log.e("ashu",MOB_NUMBER);
-									String uploadID = time+"";
-									databaseReference.child(uploadID).setValue(garbage);
-								}
-							});
-						}
+					.addOnSuccessListener(taskSnapshot -> {
+						Handler handler = new Handler();
+						handler.postDelayed(() -> progressBar.setProgress(0),3000);
+						Toast.makeText(UploadActivity.this,"Garbage Successful!",Toast.LENGTH_LONG);
+						storageReference.child(time+"."+getFileExtension(ImageUri)).getDownloadUrl().addOnSuccessListener(uri -> {
+							String url = uri.toString();
+							upvoters.add(MOB_NUMBER);
+							Garbage garbage = new Garbage(description.getText().toString().trim(),severe,organic,latLng.latitude,latLng.longitude,1,false,url,MOB_NUMBER,upvoters);
+							String uploadID = time+"";
+							databaseReference.child(uploadID).setValue(garbage);
+						});
 					})
-					.addOnFailureListener(new OnFailureListener() {
-						@Override
-						public void onFailure(@NonNull Exception e) {
-							//   Log.e("Ashu","Reached11!!!");
-							Toast.makeText(UploadActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
-						}
+					.addOnFailureListener(e -> {
+						Toast.makeText(UploadActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
 					})
-					.addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-						@Override
-						public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-							//   Log.e("Ashu","Reached111!!!");
-							double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
-							progressBar.setProgress((int)progress);
-						}
+					.addOnProgressListener(taskSnapshot -> {
+						double progress = (100.0*taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount());
+						progressBar.setProgress((int)progress);
 					});
 		}else{
 			Toast.makeText(this,"No File selected!!!",Toast.LENGTH_SHORT).show();

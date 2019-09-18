@@ -44,7 +44,7 @@ public class Admin extends AppCompatActivity {
 	private StorageReference storageReference;
 	private Button approved;
 	private Button disapproved;
-	//private Uri url;
+
 	List<SampleItem> msampleItem = new ArrayList<>();
 
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -57,9 +57,17 @@ public class Admin extends AppCompatActivity {
 		//Display menu to user
 		switch (item.getItemId()) {
 			case R.id.register:
-
+				Intent intent3 = new Intent(Admin.this,DriverRegisterActivity.class);
+				startActivity(intent3);
+				return true;
 			case R.id.feedback:
-
+				Intent intent4 = new Intent(Admin.this,AdminFeedback.class);
+				startActivity(intent4);
+				return true;
+			case R.id.complaint:
+				Intent intent5 = new Intent(Admin.this,AdminComplaint.class);
+				startActivity(intent5);
+				return true;
 			case R.id.organic:
 				Intent intent = new Intent(Admin.this,OrganicGraph.class);
 				startActivity(intent);
@@ -105,7 +113,7 @@ public class Admin extends AppCompatActivity {
 					if(!post.getVerified())
 					{
 						msampleItem.add(new SampleItem(post.getDescription(),post.getOrganic(),
-								post.getSevere(),post.getUpvotes(),post.getUrl(),approved,disapproved));
+								post.getSevere(),post.getUpvotes(),post.getUrl(),approved,disapproved,postSnapshot.getKey()));
 						Log.e("ashu", msampleItem.size()+"");
 					}
 				}
@@ -163,8 +171,8 @@ public class Admin extends AppCompatActivity {
 		@Override
 		public void onBindViewHolder(@NonNull MainAdapter.ViewHolder holder, int position) {
 			holder.nameView.setText(samples.get(position).getName());
-			holder.organic.setText(samples.get(position).getOrganic()?"Organic":"Inorganic");
-			holder.severe.setText(samples.get(position).getSevere()?"Severe":"Not Severe");
+			holder.organic.setText(samples.get(position).getOrganic() ? "Organic" : "Inorganic");
+			holder.severe.setText(samples.get(position).getSevere() ? "Severe" : "Not Severe");
 			holder.upvote.setText("Upvotes: "+samples.get(position).getUpvote());
 			StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
 
@@ -179,10 +187,10 @@ public class Admin extends AppCompatActivity {
 			holder.garbage.setImageBitmap(bm);
 			System.err.println(samples.get(position).getGarbage());
 			holder.approved.setOnClickListener(view -> {
-
+				databaseReference.child(samples.get(position).getKey()).child("verified").setValue(true);
 			});
 			holder.disapproved.setOnClickListener(view -> {
-
+				databaseReference.child(samples.get(position).getKey()).setValue(null);
 			});
 		}
 
@@ -207,5 +215,4 @@ public class Admin extends AppCompatActivity {
 		editor.putString("User","no");
 		editor.apply();
 	}
-
 }

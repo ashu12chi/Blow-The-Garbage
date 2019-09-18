@@ -69,6 +69,8 @@ import com.mapbox.mapboxsdk.style.layers.LineLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncher;
 import com.mapbox.services.android.navigation.ui.v5.NavigationLauncherOptions;
+import com.mapbox.services.android.navigation.v5.location.replay.ReplayRouteLocationEngine;
+import com.mapbox.services.android.navigation.v5.navigation.MapboxNavigation;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -111,6 +113,8 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 	IconFactory iconFactory;
 	Icon icon;
 
+	private MapboxNavigation navigation;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -118,6 +122,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 		// Mapbox access token is configured here. This needs to be called either in your application
 		// object or in the same activity which contains the mapview.
 		Mapbox.getInstance(this, getString(R.string.access_token));
+		navigation = new MapboxNavigation(getApplicationContext(), getString(R.string.access_token));
 
 		// This contains the MapView in XML and needs to be called after the access token is configured.
 		setContentView(R.layout.activity_driver);
@@ -329,6 +334,16 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 								// Get most optimized route from API response
 								optimizedRoute = routes.get(0);
 								drawOptimizedRoute(style, optimizedRoute);
+//								if(optimizedRoute==null) {
+//									Log.e("NSP","is null");
+//								} else {
+//									Log.e("NSP","is NOT null "+optimizedRoute.toString());
+//									ReplayRouteLocationEngine replayEngine = new ReplayRouteLocationEngine();
+//									replayEngine.assign(optimizedRoute);
+//
+//									navigation.setLocationEngine(replayEngine);
+//									navigation.startNavigation(optimizedRoute);
+//								}
 							}
 						} else {
 							Log.e("NSP","list of routes in the response is null");

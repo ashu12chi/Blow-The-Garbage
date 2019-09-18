@@ -69,9 +69,11 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-//		clearTable();
+
+		enableMyLocation();
+		schedulealarm();
+
 		loadPreferences();
-		System.out.println(mobNo);
 		if(loggedIn.charAt(0)=='D') {
 			Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();
 			Intent intent = new Intent(MainActivity.this,DriverActivity.class);
@@ -166,9 +168,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 			progressDialog=new ProgressDialog(MainActivity.this);
 			login();
 		});
-
-		enableMyLocation();
-//		schedulealarm();
 	}
 	private void enableMyLocation() {
 		if (ContextCompat.checkSelfPermission(this,
@@ -447,5 +446,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 		// Interval can be INTERVAL_FIFTEEN_MINUTES, INTERVAL_HALF_HOUR, INTERVAL_HOUR, INTERVAL_DAY
 		alarm.setInexactRepeating(AlarmManager.RTC_WAKEUP, SystemClock.elapsedRealtime(),
 				1000*40, pIntent);
+		Log.e("Info","Reached Here by NSP");
+
 	}
 }

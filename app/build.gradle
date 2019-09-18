@@ -52,4 +52,5 @@ dependencies {
     implementation 'com.google.android.libraries.places:places:2.0.0'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-sdk:8.4.0-alpha.1'
     implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation-ui:0.41.0'
+    implementation 'com.mapbox.mapboxsdk:mapbox-android-navigation:0.41.0'
 }

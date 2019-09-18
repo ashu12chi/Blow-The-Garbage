@@ -1,9 +1,6 @@
 package com.npdevs.blowthegarbage;
 
-import android.media.Image;
-import android.net.Uri;
 import android.widget.Button;
-import android.widget.ImageView;
 
 public class SampleItem {
 
@@ -12,8 +9,9 @@ public class SampleItem {
 	private int upvote;
 	private String garbage;
 	private Button approved,disapproved;
+	private String key;
 
-	public SampleItem(String name, boolean organic, boolean severe, int upvote, String garbage, Button approved, Button disapproved) {
+	public SampleItem(String name, boolean organic, boolean severe, int upvote, String garbage, Button approved, Button disapproved, String key) {
 		this.name = name;
 		this.organic = organic;
 		this.severe = severe;
@@ -21,6 +19,23 @@ public class SampleItem {
 		this.garbage = garbage;
 		this.approved = approved;
 		this.disapproved = disapproved;
+		this.key = key;
+	}
+
+	public boolean isOrganic() {
+		return organic;
+	}
+
+	public boolean isSevere() {
+		return severe;
+	}
+
+	public String getKey() {
+		return key;
+	}
+
+	public void setKey(String key) {
+		this.key = key;
 	}
 
 	public String getName() {

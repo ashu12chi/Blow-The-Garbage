@@ -12,8 +12,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 public class OptionsPage extends AppCompatActivity {
 	private CardView text,text2,text3,text4;
@@ -32,14 +30,14 @@ public class OptionsPage extends AppCompatActivity {
 		Intent intent = getIntent();
 		MOB_NUMBER=intent.getStringExtra("MOB_NUMBER");
 
-		btnLogout.setOnClickListener(v -> {
-			clearTable();
-			saveTable();
-			finish();
-		});
-
 		text.setOnClickListener(view -> openGarbageClassifyActivity());
 		text3.setOnClickListener(view -> openMapsSelectLocationActivity());
+		text4.setOnClickListener(view -> openComplaintActivity());
+	}
+
+	private void openComplaintActivity() {
+		Intent intent = new Intent(this,ComplaintActivity.class);
+		startActivity(intent);
 	}
 
 	public boolean onCreateOptionsMenu(Menu menu) {

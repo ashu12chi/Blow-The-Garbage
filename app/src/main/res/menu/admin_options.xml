@@ -2,10 +2,13 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/register"
-        android:title="Register-Cleaner"
+        android:title="Register cleaner"
+        app:showAsAction="never"/>
+    <item android:id="@+id/complaint"
+        android:title="Cleaner complaints"
         app:showAsAction="never"/>
     <item android:id="@+id/feedback"
-        android:title="Feedback/Review"
+        android:title="View Feedback/Review"
         app:showAsAction="never"/>
     <item
         android:id="@+id/organic"
