@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 		});
 
 		textInputLayout2=findViewById(R.id.name_text_input2);
-		textInputLayout2.getEditText().addTextChangedListener(new TextWatcher() {
+		Objects.requireNonNull(textInputLayout2.getEditText()).addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 				if(charSequence.length()==0){

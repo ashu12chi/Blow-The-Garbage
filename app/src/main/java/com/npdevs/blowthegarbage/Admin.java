@@ -45,6 +45,7 @@ public class Admin extends AppCompatActivity {
 	private DatabaseReference garbageDataRef;
 	private Button approved;
 	private Button disapproved;
+	private ProgressDialog progressDialog;
 
 	List<SampleItem> msampleItem = new ArrayList<>();
 
@@ -97,7 +98,7 @@ public class Admin extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin);
 		getSupportActionBar().setTitle("Administrator");
-		ProgressDialog progressDialog=new ProgressDialog(Admin.this);
+		progressDialog=new ProgressDialog(Admin.this);
 		progressDialog.setMessage("Loading...");
 		progressDialog.setCancelable(false);
 		progressDialog.show();
@@ -132,7 +133,7 @@ public class Admin extends AppCompatActivity {
 			}
 			@Override
 			public void onCancelled(@NonNull DatabaseError databaseError) {
-
+				progressDialog.cancel();
 			}
 		});
 	}
@@ -198,6 +199,7 @@ public class Admin extends AppCompatActivity {
 				garbageDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
 					@Override
 					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+						progressDialog.show();
 						if(severe) {
 							if(dataSnapshot.child("severe").exists()) {
 								garbageDataRef.child("severe").setValue(dataSnapshot.child("severe").getValue(Integer.class) + 1);
@@ -224,11 +226,12 @@ public class Admin extends AppCompatActivity {
 								garbageDataRef.child("inorganic").setValue(1);
 							}
 						}
+						progressDialog.cancel();
 					}
 
 					@Override
 					public void onCancelled(@NonNull DatabaseError databaseError) {
-
+						progressDialog.cancel();
 					}
 				});
 			});

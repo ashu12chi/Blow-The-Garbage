@@ -25,7 +25,7 @@
 	<ImageView
 		android:id="@+id/imageView"
 		android:layout_width="288dp"
-		android:layout_height="232dp"
+		android:layout_height="288dp"
 		android:background="@drawable/images"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"

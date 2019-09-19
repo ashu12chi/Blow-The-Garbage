@@ -112,17 +112,15 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 
 		mFusedLocationProviderClient=LocationServices.getFusedLocationProviderClient(this);
 
-		buttonConfirm.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				Intent intent=new Intent(MapsSelectLocation.this,UploadActivity.class);
-				double location[]=new double[2];
-				location[0]=latLng.latitude;
-				location[1]=latLng.longitude;
-				intent.putExtra("Location",location);
-				intent.putExtra("MOB_NUMBER",MOB_NUMBER);
-				startActivity(intent);
-			}
+		buttonConfirm.setOnClickListener(view -> {
+			Intent intent=new Intent(MapsSelectLocation.this,UploadActivity.class);
+			double location[]=new double[2];
+			location[0]=latLng.latitude;
+			location[1]=latLng.longitude;
+			intent.putExtra("Location",location);
+			intent.putExtra("MOB_NUMBER",MOB_NUMBER);
+			startActivity(intent);
+			finish();
 		});
 	}
 	@Override
@@ -148,13 +146,10 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		enableMyLocation();
 		showGarbages();
 
-		mMap.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
-			@Override
-			public boolean onMyLocationButtonClick() {
-				DEFAULT_ZOOM=mMap.getCameraPosition().zoom;
-				getDeviceLocation();
-				return false;
-			}
+		mMap.setOnMyLocationButtonClickListener(() -> {
+			DEFAULT_ZOOM=mMap.getCameraPosition().zoom;
+			getDeviceLocation();
+			return false;
 		});
 
 		mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
@@ -172,36 +167,27 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 			}
 		});
 
-		mMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-			@Override
-			public void onInfoWindowClick(Marker marker1) {
-				if(marker1.getTitle().equals("Garbage Here"));
-				{
-					openDialog(marker1);
-				}
+		mMap.setOnInfoWindowClickListener(marker1 -> {
+			if(marker1.getTitle().equals("Garbage Here"))
+			{
+				openDialog(marker1);
 			}
 		});
 
-		mMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-			@Override
-			public void onMapLongClick(LatLng ll) {
-				latLng=ll;
-				marker.remove();
-				marker=mMap.addMarker(new MarkerOptions().position(latLng).title("Drag to adjust...").draggable(true));
-				mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
-			}
+		mMap.setOnMapLongClickListener(ll -> {
+			latLng=ll;
+			marker.remove();
+			marker=mMap.addMarker(new MarkerOptions().position(latLng).title("Drag to adjust...").draggable(true));
+			mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,DEFAULT_ZOOM));
 		});
 
-		floatingActionButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				PlaceAutocomplete.clearRecentHistory(getApplicationContext());
-				Intent intent = new PlaceAutocomplete.IntentBuilder()
-						.placeOptions(PlaceOptions.builder().backgroundColor(Color.WHITE).proximity(Point.fromLngLat(latLng.longitude,latLng.latitude)).country("IN").build())
-						.accessToken(access_token)
-						.build(MapsSelectLocation.this);
-				startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
-			}
+		floatingActionButton.setOnClickListener(view -> {
+			PlaceAutocomplete.clearRecentHistory(getApplicationContext());
+			Intent intent = new PlaceAutocomplete.IntentBuilder()
+					.placeOptions(PlaceOptions.builder().backgroundColor(Color.WHITE).proximity(Point.fromLngLat(latLng.longitude,latLng.latitude)).country("IN").build())
+					.accessToken(access_token)
+					.build(MapsSelectLocation.this);
+			startActivityForResult(intent, REQUEST_CODE_AUTOCOMPLETE);
 		});
 	}
 	private void showGarbages(){
@@ -371,79 +357,72 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 		msg.setTextSize(20);
 		alertDialog.setView(msg);
 
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, " UPVOTE ", new DialogInterface.OnClickListener() {
-			@Override
-			public void onClick(DialogInterface dialogInterface, int i) {
-				String key1=marker1.getSnippet();
-				final String key=key1.substring(key1.lastIndexOf(':')+2);
-				final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
-				System.out.println(key+" "+up);
-				DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
-				databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-					@Override
-					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-						Garbage data=dataSnapshot.getValue(Garbage.class);
-						if(data.getUpvoters()!=null) {
-							if (!data.getUpvoters().contains(MOB_NUMBER)) {
-								data.getUpvoters().add(MOB_NUMBER);
-								data.setUpvotes(up + 1);
-								myRef.child(key).setValue(data);
-								showGarbages();
-							} else {
-								Toast.makeText(getApplicationContext(), "Already voted!!!", Toast.LENGTH_SHORT).show();
-							}
-						}else {
-							data.setUpvotes(1);
-							ArrayList<String> a=new ArrayList<>();
-							a.add(MOB_NUMBER);
-							data.setUpvoters(a);
-							myRef.child(key).setValue(data);
-							showGarbages();
-						}
-					}
-
-					@Override
-					public void onCancelled(@NonNull DatabaseError databaseError) {
-						Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
-					}
-				});
-			}
-		});
-
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"BACK  ", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				// No need to write anything here
-			}
-		});
-
-		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE," DOWNVOTE ", new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				String key1=marker1.getSnippet();
-				final String key=key1.substring(key1.lastIndexOf(':')+2);
-				final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
-				System.out.println(key+" "+up);
-				DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
-				databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-					@Override
-					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-						Garbage data=dataSnapshot.getValue(Garbage.class);
-						if(!data.getUpvoters().contains(MOB_NUMBER)) {
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, " UPVOTE ", (dialogInterface, i) -> {
+			String key1=marker1.getSnippet();
+			final String key=key1.substring(key1.lastIndexOf(':')+2);
+			final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+			System.out.println(key+" "+up);
+			DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
+			databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+					Garbage data=dataSnapshot.getValue(Garbage.class);
+					if(data.getUpvoters()!=null) {
+						if (!data.getUpvoters().contains(MOB_NUMBER)) {
 							data.getUpvoters().add(MOB_NUMBER);
-							data.setUpvotes(up-1);
+							data.setUpvotes(up + 1);
 							myRef.child(key).setValue(data);
 							showGarbages();
+						} else {
+							Toast.makeText(getApplicationContext(), "Already voted!!!", Toast.LENGTH_SHORT).show();
 						}
-						else {
-							Toast.makeText(getApplicationContext(),"Already voted!!!",Toast.LENGTH_SHORT).show();
-						}
+					}else {
+						data.setUpvotes(1);
+						ArrayList<String> a=new ArrayList<>();
+						a.add(MOB_NUMBER);
+						data.setUpvoters(a);
+						myRef.child(key).setValue(data);
+						showGarbages();
 					}
+				}
 
-					@Override
-					public void onCancelled(@NonNull DatabaseError databaseError) {
-						Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
+				@Override
+				public void onCancelled(@NonNull DatabaseError databaseError) {
+					Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
+				}
+			});
+		});
+
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL,"BACK  ", (dialog, which) -> {
+			// No need to write anything here
+		});
+
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE," DOWNVOTE ", (dialog, which) -> {
+			String key1=marker1.getSnippet();
+			final String key=key1.substring(key1.lastIndexOf(':')+2);
+			final int up=Integer.parseInt(key1.substring(key1.indexOf(':')+2,key1.indexOf('\n')));
+			System.out.println(key+" "+up);
+			DatabaseReference databaseReference=FirebaseDatabase.getInstance().getReference("garbage-request/"+key);
+			databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+				@Override
+				public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+					Garbage data=dataSnapshot.getValue(Garbage.class);
+					if(!data.getUpvoters().contains(MOB_NUMBER)) {
+						data.getUpvoters().add(MOB_NUMBER);
+						data.setUpvotes(up-1);
+						myRef.child(key).setValue(data);
+						showGarbages();
 					}
-				});
-			}
+					else {
+						Toast.makeText(getApplicationContext(),"Already voted!!!",Toast.LENGTH_SHORT).show();
+					}
+				}
+
+				@Override
+				public void onCancelled(@NonNull DatabaseError databaseError) {
+					Toast.makeText(getApplicationContext(),"Failed!!!",Toast.LENGTH_SHORT).show();
+				}
+			});
 		});
 
 		new Dialog(getApplicationContext());

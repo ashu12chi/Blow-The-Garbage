@@ -65,112 +65,103 @@ public class SignUp extends AppCompatActivity {
 		FirebaseApp.initializeApp(this);
 		mAuth=FirebaseAuth.getInstance();
 
-		signup.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				String n,m,a,p1,p2,o;
-				n=name.getText().toString();
-				m=mobNumber.getText().toString();
-				a=address.getText().toString();
-				p1=password1.getText().toString();
-				p2=password2.getText().toString();
-				o=otp.getText().toString();
-				if(n.isEmpty()) {
-					nameLay.setError("Enter valid name!");
-					name.requestFocus();
-					return;
-				}
-				if(m.length() != 10) {
-					mobLay.setError("Enter valid Mobile Number!");
-					mobNumber.requestFocus();
-					return;
-				}
-				if(a.isEmpty()) {
-					addLay.setError("Enter valid address!");
-					address.requestFocus();
-					return;
-				}
-				if(p1.isEmpty() || p1.length()<6) {
-					p1Lay.setError("Enter at least 6 length password!");
-					password1.requestFocus();
-					return;
-				}
-				if(p2.isEmpty() || p2.length()<6 || !p2.equals(p1)) {
-					p2Lay.setError("Enter same password here!");
-					password2.requestFocus();
-					return;
-				} else {
-					progressDialog.setMessage("Registering...");
-					progressDialog.show();
-					verifySignInCode();
-				}
+		signup.setOnClickListener(view -> {
+			String n,m,a,p1,p2,o;
+			n=name.getText().toString();
+			m=mobNumber.getText().toString();
+			a=address.getText().toString();
+			p1=password1.getText().toString();
+			p2=password2.getText().toString();
+			o=otp.getText().toString();
+			if(n.isEmpty()) {
+				nameLay.setError("Enter valid name!");
+				name.requestFocus();
+				return;
+			}
+			if(m.length() != 10) {
+				mobLay.setError("Enter valid Mobile Number!");
+				mobNumber.requestFocus();
+				return;
+			}
+			if(a.isEmpty()) {
+				addLay.setError("Enter valid address!");
+				address.requestFocus();
+				return;
+			}
+			if(p1.isEmpty() || p1.length()<6) {
+				p1Lay.setError("Enter at least 6 length password!");
+				password1.requestFocus();
+				return;
+			}
+			if(p2.isEmpty() || p2.length()<6 || !p2.equals(p1)) {
+				p2Lay.setError("Enter same password here!");
+				password2.requestFocus();
+				return;
+			} else {
+				progressDialog.setMessage("Registering...");
+				progressDialog.show();
+				verifySignInCode();
 			}
 		});
-		getOTP.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				String m=mobNumber.getText().toString();
-				if(m.isEmpty()) {
-					mobLay.setError("Enter valid Mobile Number");
-					mobNumber.requestFocus();
-					return;
-				} else {
-					progressDialog.setMessage("Sending OTP...");
-					progressDialog.show();
-					sendVerificationCode();
-				}
+		getOTP.setOnClickListener(view -> {
+			String m=mobNumber.getText().toString();
+			if(m.isEmpty()) {
+				mobLay.setError("Enter valid Mobile Number");
+				mobNumber.requestFocus();
+				return;
+			} else {
+				progressDialog.setMessage("Sending OTP...");
+				progressDialog.show();
+				sendVerificationCode();
 			}
 		});
 	}
 	private void openMainActivity(PhoneAuthCredential phoneAuthCredential) {
 
 		mAuth.signInWithCredential(phoneAuthCredential)
-				.addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-					@Override
-					public void onComplete(@NonNull Task<AuthResult> task) {
-						if(task.isSuccessful()){
-							final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
-									.getReference("users");
-							String name1 = name.getText().toString();
-							String mobNumber1 = mobNumber.getText().toString();
-							String address1 = address.getText().toString();
-							String password = password1.getText().toString();
-							MessageDigest digest = null;
-							try {
-								digest = MessageDigest.getInstance("SHA-256");
-							} catch (NoSuchAlgorithmException e) {
-								e.printStackTrace();
-							}
-							assert digest != null;
-							byte[] pp = digest.digest(password.getBytes(StandardCharsets.UTF_8));
-							password= Arrays.toString(pp);
-							final Users users = new Users(name1,mobNumber1,password,address1);
-							databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-								@Override
-								public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-									if(dataSnapshot.child(users.getMobNumber()).exists()) {
-										Toast.makeText(getApplicationContext(), "User already exists!!!", Toast.LENGTH_SHORT)
-												.show();
-										progressDialog.cancel();
-										finish();
-									}
-									else
-									{
-										databaseReference.child(users.getMobNumber()).setValue(users);
-										Toast.makeText(getApplicationContext(),"SignUp successful!!!",Toast.LENGTH_SHORT).show();
-										progressDialog.cancel();
-										finish();
-									}
-
-								}
-
-								@Override
-								public void onCancelled(@NonNull DatabaseError databaseError) {
-									Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
-									progressDialog.cancel();
-								}
-							});
+				.addOnCompleteListener(this, task -> {
+					if(task.isSuccessful()){
+						final DatabaseReference databaseReference = FirebaseDatabase.getInstance()
+								.getReference("users");
+						String name1 = name.getText().toString();
+						String mobNumber1 = mobNumber.getText().toString();
+						String address1 = address.getText().toString();
+						String password = password1.getText().toString();
+						MessageDigest digest = null;
+						try {
+							digest = MessageDigest.getInstance("SHA-256");
+						} catch (NoSuchAlgorithmException e) {
+							e.printStackTrace();
 						}
+						assert digest != null;
+						byte[] pp = digest.digest(password.getBytes(StandardCharsets.UTF_8));
+						password= Arrays.toString(pp);
+						final Users users = new Users(name1,mobNumber1,password,address1);
+						databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+							@Override
+							public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+								if(dataSnapshot.child(users.getMobNumber()).exists()) {
+									Toast.makeText(getApplicationContext(), "User already exists!!!", Toast.LENGTH_SHORT)
+											.show();
+									progressDialog.cancel();
+									finish();
+								}
+								else
+								{
+									databaseReference.child(users.getMobNumber()).setValue(users);
+									Toast.makeText(getApplicationContext(),"SignUp successful!!!",Toast.LENGTH_SHORT).show();
+									progressDialog.cancel();
+									finish();
+								}
+
+							}
+
+							@Override
+							public void onCancelled(@NonNull DatabaseError databaseError) {
+								Toast.makeText(getApplicationContext(),"Process Cancelled!",Toast.LENGTH_LONG).show();
+								progressDialog.cancel();
+							}
+						});
 					}
 				});
 
