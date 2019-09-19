@@ -5,7 +5,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
-//import android.support.v7.app.AppCompatActivity;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.View;
@@ -24,8 +23,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.wonderkiln.camerakit.CameraKitError;
@@ -64,6 +66,7 @@ public class GarbageClassify extends AppCompatActivity {
 	private ImageView imageViewResult;
 	private CameraView cameraView;
 	private Bitmap bitmap;
+	private DatabaseReference garbageDataRef;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class GarbageClassify extends AppCompatActivity {
 		getDeviceLocation();
 		storageReference = FirebaseStorage.getInstance().getReference("garbage-request");
 		databaseReference = FirebaseDatabase.getInstance().getReference("garbage-request");
+		garbageDataRef=FirebaseDatabase.getInstance().getReference("graph-data");
 
 		btnNext = findViewById(R.id.btnToggleCamera);
 		btnDetectObject = findViewById(R.id.btnDetectObject);
@@ -131,40 +135,68 @@ public class GarbageClassify extends AppCompatActivity {
 			}
 		});
 
-		btnNext.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.e("Ashu",isGarbage+"");
-				try {
-					if (isGarbage) {
-						getDeviceLocation();
-						try {
-							Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
-							Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true, "No-url", MOB_NUMBER, upvoters);
-							String uploadID = time + "";
-							databaseReference.child(uploadID).setValue(garbageUpload);
-							Toast.makeText(GarbageClassify.this, "Verified!!!", Toast.LENGTH_SHORT).show();
-							finish();
-						}
-						catch (Exception e) {
-							Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease try again", Toast.LENGTH_LONG).show();
-						}
-					} else {
-						Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verification or try again ", Toast.LENGTH_LONG).show();
+		btnNext.setOnClickListener(v -> {
+			Log.e("Ashu",isGarbage+"");
+			try {
+				if (isGarbage) {
+					getDeviceLocation();
+					try {
+						Log.e("NSP", "Location Recieved: " + mLastKnownLocation);
+						Garbage garbageUpload = new Garbage(garbage[garbageIndex], true, false, mLastKnownLocation.getLatitude(), mLastKnownLocation.getLongitude(), 0, true, "No-url", MOB_NUMBER, upvoters);
+						String uploadID = time + "";
+						databaseReference.child(uploadID).setValue(garbageUpload);
+						garbageDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+							@Override
+							public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+								if(garbageUpload.getSevere()) {
+									if(dataSnapshot.child("severe").exists()) {
+										garbageDataRef.child("severe").setValue(dataSnapshot.child("severe").getValue(Integer.class) + 1);
+									} else {
+										garbageDataRef.child("severe").setValue(1);
+									}
+								} else {
+									if(dataSnapshot.child("notsevere").exists()) {
+										garbageDataRef.child("notsevere").setValue(dataSnapshot.child("notsevere").getValue(Integer.class) + 1);
+									} else {
+										garbageDataRef.child("notsevere").setValue(1);
+									}
+								}
+								if(garbageUpload.getOrganic()) {
+									if(dataSnapshot.child("organic").exists()) {
+										garbageDataRef.child("organic").setValue(dataSnapshot.child("organic").getValue(Integer.class) + 1);
+									} else {
+										garbageDataRef.child("organic").setValue(1);
+									}
+								} else {
+									if(dataSnapshot.child("inorganic").exists()) {
+										garbageDataRef.child("inorganic").setValue(dataSnapshot.child("inorganic").getValue(Integer.class) + 1);
+									} else {
+										garbageDataRef.child("inorganic").setValue(1);
+									}
+								}
+							}
+
+							@Override
+							public void onCancelled(@NonNull DatabaseError databaseError) {
+
+							}
+						});
+						Toast.makeText(GarbageClassify.this, "Verified!!!", Toast.LENGTH_SHORT).show();
+						finish();
 					}
-				} catch (Exception e) {
-					Log.e("LOC",e.toString());
-					Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease try again", Toast.LENGTH_LONG).show();
+					catch (Exception e) {
+						Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease try again", Toast.LENGTH_LONG).show();
+					}
+				} else {
+					Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease upload image for verification or try again ", Toast.LENGTH_LONG).show();
 				}
+			} catch (Exception e) {
+				Log.e("LOC",e.toString());
+				Toast.makeText(GarbageClassify.this, "Verification Failed!!!\nPlease try again", Toast.LENGTH_LONG).show();
 			}
 		});
 
-		btnDetectObject.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				cameraView.captureImage();
-			}
-		});
+		btnDetectObject.setOnClickListener(v -> cameraView.captureImage());
 
 		initTensorFlowAndLoadModel();
 	}
@@ -184,29 +216,21 @@ public class GarbageClassify extends AppCompatActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		executor.execute(new Runnable() {
-			@Override
-			public void run() {
-				classifier.close();
-			}
-		});
+		executor.execute(() -> classifier.close());
 	}
 
 	private void initTensorFlowAndLoadModel() {
-		executor.execute(new Runnable() {
-			@Override
-			public void run() {
-				try {
-					classifier = TensorFlowImageClassifier.create(
-							getAssets(),
-							MODEL_PATH,
-							LABEL_PATH,
-							INPUT_SIZE,
-							QUANT);
-					makeButtonVisible();
-				} catch (final Exception e) {
-					throw new RuntimeException("Error initializing TensorFlow!", e);
-				}
+		executor.execute(() -> {
+			try {
+				classifier = TensorFlowImageClassifier.create(
+						getAssets(),
+						MODEL_PATH,
+						LABEL_PATH,
+						INPUT_SIZE,
+						QUANT);
+				makeButtonVisible();
+			} catch (final Exception e) {
+				throw new RuntimeException("Error initializing TensorFlow!", e);
 			}
 		});
 	}

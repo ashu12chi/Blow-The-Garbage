@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
 		enableMyLocation();
 		schedulealarm();
 
+		getSupportActionBar().hide();
+
 		loadPreferences();
 		if(loggedIn.charAt(0)=='D') {
 			Toast.makeText(getApplicationContext(),"Login Success!",Toast.LENGTH_LONG).show();

@@ -42,6 +42,7 @@ public class Admin extends AppCompatActivity {
 	private RecyclerView recyclerView;
 	private DatabaseReference databaseReference;
 	private StorageReference storageReference;
+	private DatabaseReference garbageDataRef;
 	private Button approved;
 	private Button disapproved;
 
@@ -83,6 +84,8 @@ public class Admin extends AppCompatActivity {
 			case R.id.logout:
 				clearTable();
 				saveTable();
+				Intent intent6=new Intent(Admin.this,MainActivity.class);
+				startActivity(intent6);
 				finish();
 			default:
 				return super.onOptionsItemSelected(item);
@@ -93,12 +96,14 @@ public class Admin extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin);
+		getSupportActionBar().setTitle("Administrator");
 		ProgressDialog progressDialog=new ProgressDialog(Admin.this);
 		progressDialog.setMessage("Loading...");
 		progressDialog.setCancelable(false);
 		progressDialog.show();
 		databaseReference = FirebaseDatabase.getInstance().getReference("garbage-request");
 		storageReference = FirebaseStorage.getInstance().getReference("garbage-request");
+		garbageDataRef=FirebaseDatabase.getInstance().getReference("graph-data");
 		FirebaseApp.initializeApp(this);
 
 		databaseReference.addValueEventListener(new ValueEventListener() {
@@ -188,6 +193,44 @@ public class Admin extends AppCompatActivity {
 			System.err.println(samples.get(position).getGarbage());
 			holder.approved.setOnClickListener(view -> {
 				databaseReference.child(samples.get(position).getKey()).child("verified").setValue(true);
+				boolean severe=holder.severe.getText().toString().equals("Severe");
+				boolean organic=holder.organic.getText().toString().equals("Organic");
+				garbageDataRef.addListenerForSingleValueEvent(new ValueEventListener() {
+					@Override
+					public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+						if(severe) {
+							if(dataSnapshot.child("severe").exists()) {
+								garbageDataRef.child("severe").setValue(dataSnapshot.child("severe").getValue(Integer.class) + 1);
+							} else {
+								garbageDataRef.child("severe").setValue(1);
+							}
+						} else {
+							if(dataSnapshot.child("notsevere").exists()) {
+								garbageDataRef.child("notsevere").setValue(dataSnapshot.child("notsevere").getValue(Integer.class) + 1);
+							} else {
+								garbageDataRef.child("notsevere").setValue(1);
+							}
+						}
+						if(organic) {
+							if(dataSnapshot.child("organic").exists()) {
+								garbageDataRef.child("organic").setValue(dataSnapshot.child("organic").getValue(Integer.class) + 1);
+							} else {
+								garbageDataRef.child("organic").setValue(1);
+							}
+						} else {
+							if(dataSnapshot.child("inorganic").exists()) {
+								garbageDataRef.child("inorganic").setValue(dataSnapshot.child("inorganic").getValue(Integer.class) + 1);
+							} else {
+								garbageDataRef.child("inorganic").setValue(1);
+							}
+						}
+					}
+
+					@Override
+					public void onCancelled(@NonNull DatabaseError databaseError) {
+
+					}
+				});
 			});
 			holder.disapproved.setOnClickListener(view -> {
 				databaseReference.child(samples.get(position).getKey()).setValue(null);

@@ -36,6 +36,7 @@ public class AdminFeedback extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_admin_feedback);
+		getSupportActionBar().setTitle("View feedbacks");
 		recyclerView = findViewById(R.id.recycler_view);
 		databaseReference = FirebaseDatabase.getInstance().getReference("feedback");
 		databaseReference.addValueEventListener(new ValueEventListener() {

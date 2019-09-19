@@ -33,12 +33,7 @@ public class OptionsPage extends AppCompatActivity {
 		text.setOnClickListener(view -> openGarbageClassifyActivity());
 		text3.setOnClickListener(view -> openMapsSelectLocationActivity());
 		text4.setOnClickListener(view -> openComplaintActivity());
-		text2.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				openFeedbackActivity();
-			}
-		});
+		text2.setOnClickListener(view -> openFeedbackActivity());
 	}
 
 	private void openFeedbackActivity() {
@@ -63,6 +58,8 @@ public class OptionsPage extends AppCompatActivity {
 			case R.id.logout:
 				clearTable();
 				saveTable();
+				Intent intent=new Intent(OptionsPage.this,MainActivity.class);
+				startActivity(intent);
 				finish();
 			default:
 				return super.onOptionsItemSelected(item);

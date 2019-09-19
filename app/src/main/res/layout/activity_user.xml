@@ -20,10 +20,9 @@
 		app:cardElevation="8dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/cardView3"
-		app:layout_constraintVertical_bias="0.081">
+		app:layout_constraintVertical_bias="0.163">
 
 		<TextView
 			android:id="@+id/textView8"
@@ -49,7 +48,7 @@
 		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintVertical_bias="0.036">
+		app:layout_constraintVertical_bias="0.04">
 
 		<TextView
 			android:id="@+id/editText3"
@@ -72,10 +71,9 @@
 		app:cardElevation="8dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/cardView"
-		app:layout_constraintVertical_bias="0.03">
+		app:layout_constraintVertical_bias="0.036">
 
 		<TextView
 			android:id="@+id/textView6"
@@ -98,10 +96,9 @@
 		app:cardElevation="8dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintHorizontal_bias="0.0"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintTop_toBottomOf="@+id/cardView2"
-		app:layout_constraintVertical_bias="0.039">
+		app:layout_constraintVertical_bias="0.067">
 
 		<TextView
 			android:id="@+id/textView7"

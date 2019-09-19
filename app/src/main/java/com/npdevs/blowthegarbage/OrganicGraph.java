@@ -33,6 +33,7 @@ public class OrganicGraph extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getSupportActionBar().setTitle("Organic/ Inorganic pie");
         databaseReference = FirebaseDatabase.getInstance().getReference("graph-data");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -51,26 +52,16 @@ public class OrganicGraph extends AppCompatActivity {
                 pieChart = (PieChart) findViewById(R.id.idPieChart);
                 pieChart.setDescription("Organic/In-Organic ");
                 pieChart.setRotationEnabled(true);
-                //pieChart.setUsePercentValues(true);
-                //pieChart.setHoleColor(Color.BLUE);
-                //pieChart.setCenterTextColor(Color.BLACK);
+                pieChart.setUsePercentValues(true);
                 pieChart.setHoleRadius(25f);
                 pieChart.setTransparentCircleAlpha(0);
                 pieChart.setCenterText("Organic-Inorganic");
                 pieChart.setCenterTextSize(10);
-                //pieChart.setDrawEntryLabels(true);
-                //pieChart.setEntryLabelTextSize(20);
-                //More options just check out the documentation!
 
                 addDataSet();
                 pieChart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
                     @Override
                     public void onValueSelected(Entry e, Highlight h) {
-                        String TAG="nsp";
-//                             Log.e(TAG, "onValueSelected: Value select from chart.");
-//                           Log.e(TAG, "onValueSelected: " + e.toString());
-//                         Log.e(TAG, "onValueSelected: " + h.toString());
-
                         int pos1 = e.toString().indexOf("(sum): ");
                         String sales = e.toString().substring(pos1 + 7);
 
@@ -119,12 +110,7 @@ public class OrganicGraph extends AppCompatActivity {
         //add colors to dataset
         ArrayList<Integer> colors = new ArrayList<>();
         colors.add(Color.GRAY);
-        colors.add(Color.BLUE);
-        colors.add(Color.RED);
-        colors.add(Color.GREEN);
         colors.add(Color.CYAN);
-        colors.add(Color.YELLOW);
-        colors.add(Color.MAGENTA);
 
         pieDataSet.setColors(colors);
 

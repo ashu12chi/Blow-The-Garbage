@@ -5,6 +5,7 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:overScrollMode="always"
+	android:layout_marginHorizontal="8dp"
 	tools:context=".ComplaintActivity">
 
 	<com.google.android.material.textfield.TextInputLayout
@@ -30,9 +31,9 @@
 	<fragment
 		android:id="@+id/map"
 		android:name="com.google.android.gms.maps.SupportMapFragment"
-		android:layout_width="396dp"
-		android:layout_height="481dp"
-		android:layout_marginHorizontal="8dp"
+		android:layout_width="match_parent"
+		android:layout_height="460dp"
+		android:layout_marginHorizontal="10dp"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintHorizontal_bias="0.466"

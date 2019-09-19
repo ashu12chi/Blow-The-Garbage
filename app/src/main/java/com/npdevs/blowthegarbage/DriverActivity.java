@@ -118,6 +118,7 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		getSupportActionBar().setTitle("See your Route");
 
 		// Mapbox access token is configured here. This needs to be called either in your application
 		// object or in the same activity which contains the mapview.
@@ -195,6 +196,8 @@ public class DriverActivity extends AppCompatActivity implements OnMapReadyCallb
 			case R.id.logout:
 				clearTable();
 				saveTable();
+				Intent intent=new Intent(DriverActivity.this,MainActivity.class);
+				startActivity(intent);
 				finish();
 			default:
 				return super.onOptionsItemSelected(item);

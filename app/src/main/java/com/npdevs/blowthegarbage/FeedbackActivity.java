@@ -19,21 +19,19 @@ public class FeedbackActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feedback);
+        getSupportActionBar().setTitle("Give feedback");
         feedback = findViewById(R.id.editText8);
         send = findViewById(R.id.send);
         databaseReference = FirebaseDatabase.getInstance().getReference("feedback");
-        send.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                long time = System.currentTimeMillis();
-                String feed = feedback.getText().toString();
-                if(feed.trim().equals(""))
-                    Toast.makeText(getApplicationContext(),"Enter something",Toast.LENGTH_SHORT).show();
-                else {
-                    databaseReference.child(time + "").setValue(feed);
-                    Toast.makeText(getApplicationContext(),"Sucess!!!",Toast.LENGTH_SHORT).show();
-                    finish();
-                }
+        send.setOnClickListener(view -> {
+            long time = System.currentTimeMillis();
+            String feed = feedback.getText().toString();
+            if(feed.trim().equals(""))
+                Toast.makeText(getApplicationContext(),"Enter something",Toast.LENGTH_SHORT).show();
+            else {
+                databaseReference.child(time + "").setValue(feed);
+                Toast.makeText(getApplicationContext(),"Sucess!!!",Toast.LENGTH_SHORT).show();
+                finish();
             }
         });
     }
