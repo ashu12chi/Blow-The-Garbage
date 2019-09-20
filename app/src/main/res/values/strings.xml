@@ -5,7 +5,7 @@
 	<string name="review_and_feedback">Review and Feedback</string>
 	<string name="complaint">Complaint</string>
 	<string name="title_activity_maps_select_location">Map</string>
-	<string name="access_token" translatable="false">pk.eyJ1IjoibmlzaGNoYWwiLCJhIjoiY2swMHZxeXNqMHE3NjNkc2N5NTJndnN2dCJ9.O2DHCiqvsvdRulclqUYxmg</string>
+	<string name="access_token" translatable="false">PLACE_YOUR_MAPBOX_API_KEY_HERE</string>
 	<string name="user_location_permission_explanation">This app needs location permissions to show its functionality.</string>
 	<string name="user_location_permission_not_granted">You didn\'t grant location permissions.</string>
 	<string name="title_activity_driver_register">Map</string>

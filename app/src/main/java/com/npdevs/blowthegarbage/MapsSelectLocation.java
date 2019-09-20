@@ -77,7 +77,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 	private float DEFAULT_ZOOM=16.5f;
 	private LatLng latLng;
 	private Marker marker;
-	private String access_token="pk.eyJ1IjoibmlzaGNoYWwiLCJhIjoiY2swMHZxeXNqMHE3NjNkc2N5NTJndnN2dCJ9.O2DHCiqvsvdRulclqUYxmg";
+	private String access_token="PLACE_YOUR_MAPBOX_API_KEY_HERE";
 	private FloatingActionButton floatingActionButton;
 	private Button buttonConfirm;
 	private String MOB_NUMBER;
