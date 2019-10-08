@@ -1,9 +1,9 @@
 # Blow the Garbage
 This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual Techfest of MNNIT Allahabad) 
 
-**Webpage:** https://nisiddharth.github.io/Blow-The-Garbage/
+**Webpage:** [https://nisiddharth.github.io/Blow-The-Garbage/](https://nisiddharth.github.io/Blow-The-Garbage/)
 
-**Project Presentation:** https://github.com/nisiddharth/Blow-The-Garbage/blob/master/BlowTheGarbage.pdf
+**Project Presentation:** [View here](https://github.com/nisiddharth/Blow-The-Garbage/blob/master/BlowTheGarbage.pdf)
 
 ## Welcome to Swachh Bharat
 - This app is developed to help the cleaners clean the messy roads
