@@ -1,37 +1,45 @@
-## Welcome to GitHub Pages
+# Blow the Garbage
+This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual Techfest of MNNIT Allahabad)
 
-You can use the [editor on GitHub](https://github.com/nisiddharth/Blow-The-Garbage/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
+## Welcome to Swachh Bharat
+- This app is developed to help the cleaners clean the messy roads
+- It provides an easy platform to people to accomplish the Swachha Bharat Mission
+- It also attempts of reducing the load over officials by Machine Learning
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+## The Process Flow
+For User:
+1. Login/Sign Up
+2. Select garbage proximity
+3. Accordingly select/search location (on Map), capture/upload image or upvote existing garbage point
+4. ML prediction happens
+5. In case of false prediction send Image for verification to the Admin
+6. Feedback/complaint/review submission.
 
-### Markdown
+For Admin:
+1. Authority to add/delete cleaner
+2. Verify garbage cleaning requests (notified by the app vie notification channel)
+3. Read reviews/feedbacks/complaints
+4. View cleaners’ performance data
+5. View graphs/stats related to monthly/yearly cleaning requests.
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
+For Cleaner:
+1. App notifies about newly added gapbage collection point in their alloted area and they can view them
+2. App gives them shortest path to traverse so that all garbage is collected in one ride.
+3. View one’s own stats/graphs.
 
-```markdown
-Syntax highlighted code block
+## APIs and Components used
+- Google Maps API
+- Google Maps Places API
+- Firebase Realtime DatabasFirebase Storage
+- Tensorflow
+- Tensorflow Lite
+- MPAndroidChart by PhilJay for interactive graphs
+- Material Design Search bar by ManCJ
+- AndroidX artifacts with Google Material Design components
 
-# Header 1
-## Header 2
-### Header 3
+## Blow the Garbage
+**Team:** NPDevs
 
-- Bulleted
-- List
-
-1. Numbered
-2. List
-
-**Bold** and _Italic_ and `Code` text
-
-[Link](url) and ![Image](src)
-```
-
-For more details see [GitHub Flavored Markdown](https://guides.github.com/features/mastering-markdown/).
-
-### Jekyll Themes
-
-Your Pages site will use the layout and styles from the Jekyll theme you have selected in your [repository settings](https://github.com/nisiddharth/Blow-The-Garbage/settings). The name of this theme is saved in the Jekyll `_config.yml` configuration file.
-
-### Support or Contact
-
-Having trouble with Pages? Check out our [documentation](https://help.github.com/categories/github-pages-basics/) or [contact support](https://github.com/contact) and we’ll help you sort it out.
+**Members:**
+1. [Ashutosh Chitranshi](https://github.com/ashu12chi/)
+2. [Nishchal Siddharth Pandey](https://github.com/nisiddharth/)
