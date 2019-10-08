@@ -5,6 +5,9 @@ This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual 
 
 **Project Presentation:** [View here](https://github.com/nisiddharth/Blow-The-Garbage/blob/master/BlowTheGarbage.pdf)
 
+**App's APK:** [Download here](https://github.com/nisiddharth/Blow-The-Garbage/blob/master/BlowTheGarbage.apk)
+
+
 ## Welcome to Swachh Bharat
 - This app is developed to help the cleaners clean the messy roads
 - It provides an easy platform to people to accomplish the Swachha Bharat Mission
@@ -50,6 +53,10 @@ This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual 
 2. [Nishchal Siddharth Pandey](https://github.com/nisiddharth/)
 
 ## To try hands on the project
+Either, just [download the APK](https://github.com/nisiddharth/Blow-The-Garbage/blob/master/BlowTheGarbage.apk) and try it out.
+<br>
+Or,
+<br>
 1. Clone the project using link: https://github.com/nisiddharth/Blow-The-Garbage.git
 2. Import the project in Android Studio
 3. Generate your own Google Maps API key and Mapbox API key and add it to project in strings.xml (these locations are properly commented in the project)

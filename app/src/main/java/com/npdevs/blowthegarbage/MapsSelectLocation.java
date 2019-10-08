@@ -77,7 +77,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 	private float DEFAULT_ZOOM=16.5f;
 	private LatLng latLng;
 	private Marker marker;
-	private String access_token="PLACE_YOUR_MAPBOX_API_KEY_HERE";
+	private String access_token;
 	private FloatingActionButton floatingActionButton;
 	private Button buttonConfirm;
 	private String MOB_NUMBER;
@@ -87,6 +87,7 @@ public class MapsSelectLocation extends FragmentActivity implements OnMapReadyCa
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_maps_select_location);
+		access_token = getString(R.string.access_token);
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.map);
