@@ -31,12 +31,13 @@ For Cleaner:
 
 ## APIs and Components used
 - Google Maps API
-- Google Maps Places API
-- Firebase Realtime DatabasFirebase Storage
+- Mapbox Maps API
+- Firebase Realtime Database
+- Firebase Authentication
+- Firebase Storage
 - Tensorflow
 - Tensorflow Lite
 - MPAndroidChart by PhilJay for interactive graphs
-- Material Design Search bar by ManCJ
 - AndroidX artifacts with Google Material Design components
 
 ## Blow the Garbage
