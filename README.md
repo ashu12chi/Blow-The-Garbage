@@ -11,7 +11,7 @@ This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual 
 - It also attempts of reducing the load over officials by Machine Learning
 
 ## The Process Flow
-For User:
+**For User:**
 1. Login/Sign Up
 2. Select garbage proximity
 3. Accordingly select/search location (on Map), capture/upload image or upvote existing garbage point
@@ -19,14 +19,14 @@ For User:
 5. In case of false prediction send Image for verification to the Admin
 6. Feedback/complaint/review submission.
 
-For Admin:
+**For Admin:**
 1. Authority to add/delete cleaner
 2. Verify garbage cleaning requests (notified by the app vie notification channel)
 3. Read reviews/feedbacks/complaints
 4. View cleaners’ performance data
 5. View graphs/stats related to monthly/yearly cleaning requests.
 
-For Cleaner:
+**For Cleaner:**
 1. App notifies about newly added gapbage collection point in their alloted area and they can view them
 2. App gives them shortest path to traverse so that all garbage is collected in one ride.
 3. View one’s own stats/graphs.
