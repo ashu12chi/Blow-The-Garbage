@@ -2,7 +2,11 @@
 [![Open Source Love](https://badges.frapsoft.com/os/v1/open-source.svg?v=103)](https://github.com/ellerbrock/open-source-badges/)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)<br>
 This is the official Droidrush repository of NPDevs team (Avishkar-2019--Annual Techfest of MNNIT Allahabad) <br>
-<h3>This app won fourth prize and best among second year in Droidrush 2019**</h3>
+<h3>This app won fourth prize and best among second year in Droidrush 2019</h3>
+
+**YouTube Link to Demo Video**: 
+
+[![YouTube video here](https://img.youtube.com/vi/FEcD0WRsvEk/0.jpg?raw=true)](https://www.youtube.com/watch?v=FEcD0WRsvEk)
 
 **Webpage:** [https://nisiddharth.github.io/Blow-The-Garbage/](https://nisiddharth.github.io/Blow-The-Garbage/)
 
